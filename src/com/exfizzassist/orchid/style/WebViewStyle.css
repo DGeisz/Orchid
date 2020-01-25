@@ -1,0 +1,19 @@
+span {
+    font-size: 18pt;
+}
+
+.undefined {
+    color: red;
+}
+
+.defined {
+    color: green;
+}
+
+.in-progress {
+    color: blue;
+}
+
+.in-limbo {
+    color: orange;
+}
