@@ -6,9 +6,9 @@ import com.exfizzassist.orchid.model.sockets.SetSocket;
 
 import java.util.ArrayList;
 
-public class TermDefinitionFactory extends OrchidFactory {
+public class elementDefinitionFactory extends OrchidFactory {
 
-    TermDefinitionFactory() {
+    elementDefinitionFactory() {
         sockets = new ArrayList<>();
         sockets.add(new DefinitionSocket());
         sockets.add(new SetSocket());

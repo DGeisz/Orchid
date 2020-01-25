@@ -6,18 +6,20 @@ import com.exfizzassist.orchid.model.sockets.TermSocket;
 
 import java.util.ArrayList;
 
-public class OrchidSet {
-    /** Name of the set.*/
-    String name;
-
-    /** Type of map elements of this set can act as*/
-    OrchidMap map;
-
-    public ArrayList<OrchidSocket> generateSockets() {
-        ArrayList<OrchidSocket> newSockets = new ArrayList<>();
-        for (OrchidSet set : map.getInput()) {
-            newSockets.add(new TermSocket(set));
-        }
-        return newSockets;
+public abstract class OrchidSet {
+    /** Identifier of the set.*/
+    String identifier;
+    
+    public boolean isSimpleSet() {
+        return false;
+    }
+    public boolean isCartesianProductSet() {
+        return false;
+    }
+    public boolean isMapSet() {
+        return false;
+    }
+    public boolean isHigherOrderSet() {
+        return false;
     }
 }
