@@ -11,6 +11,10 @@ import javafx.scene.web.WebView;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.print.Doc;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+
 public class EquationEditorController {
 
     /** Reference to the main application*/
@@ -75,18 +79,22 @@ public class EquationEditorController {
      */
     @FXML
     private void initialize() {
-        //Test code to be sure I can control html from this class.
+        /* Creates the web engines for the two main windows*/
         editorEngine = mainEditor.getEngine();
         termsEngine = workingTerms.getEngine();
 
-        /* If there's persisted content, this would be the place to load it in. */
+        /*Skeleton content for the current windows*/
+        String editorContent = "<html><body id=\"editor-body\"></body></html>";
+        String termsContent = "<html><body id=\"terms-body\"></body></html>";
 
-        String content = "<html><body id=\"editor-body\"></body></html>";
-
+        /* Loads Stylesheet for the editor window*/
         editorEngine.setUserStyleSheetLocation(getClass().getResource("../style/WebViewStyle.css").toString());
-        editorEngine.loadContent(content, "text/html");
-        termsEngine.loadContent(content, "text/html");
 
+        /* Loads the starting content of this session*/
+        editorEngine.loadContent(editorContent, "text/html");
+        termsEngine.loadContent(termsContent, "text/html");
+
+        /* The following commands tell the windows what to do when keys are typed*/
         mainEditor.setOnKeyTyped(event -> {
             Document doc = editorEngine.getDocument();
             handleNewKey(doc, event);
@@ -96,6 +104,7 @@ public class EquationEditorController {
             Document doc = editorEngine.getDocument();
             handleSpecialKeys(doc, event);
         });
+
 
     }
 
@@ -107,12 +116,13 @@ public class EquationEditorController {
      */
     private void handleNewKey(Document doc, KeyEvent event) {
         if (!handled) {
-            currElement = doc.getElementById(Integer.toString(currId));
+            currElement = (Element) doc.getElementsByTagName("body").item(0);
+//            currElement = doc.getElementById(Integer.toString(currId));
             currSequence += event.getCharacter();
             currElement.setTextContent(currSequence);
         }
-        
-        currElement.setAttribute("class", dock.sequenceStatus(currSequence));
+
+        currElement.setAttribute("class", "defined");//dock.sequenceStatus(currSequence));
         handled = false;
     }
 
@@ -120,7 +130,8 @@ public class EquationEditorController {
      * Handles special keys like backspace otherwise
      */
     private void handleSpecialKeys(Document doc, KeyEvent event) {
-        currElement = doc.getElementById(Integer.toString(currId));
+//        currElement = doc.getElementById(Integer.toString(currId));
+        currElement = (Element) doc.getElementsByTagName("body").item(0);
 
         if (event.getCode().equals(KeyCode.BACK_SPACE)) {
             if (currSequence.length() > 0) {
@@ -142,24 +153,47 @@ public class EquationEditorController {
         this.mainApp = mainApp;
     }
 
-
     /**
-     * Called by the main app to give reference
-     * to the editor complex
-     *
-     * @param _editorComplex
+     * This takes the DOCK from the editorComplex
+     * and gives the dock access to the skeleton
+     * HTML of the editor and terms.  The dock then populates the
+     * skeletons with the initial HTML and tells the controller
+     * currId.
      */
-    public void setEditorComplex(EditorComplex _editorComplex) {
-        editorComplex = _editorComplex;
-        dock = editorComplex.getDock();
-        editorComplex.newLine();
-        currId = dock.getCurrentId();
-        Document doc = editorEngine.getDocument();
-        Element body = doc.getElementById("editor-body");
-        Element newHtmlLine = doc.createElement("span");
-        newHtmlLine.setAttribute("id", Integer.toString(currId));
-        newHtmlLine.setAttribute("class", "line");
+    public void latchOntoDock(Dock _dock) {
+        dock = _dock;
+
+        /* Allows the dock to populate the skeleton html and tell
+        * this controller the currId*/
+        Document editorDoc = editorEngine.getDocument();
+        Element body = editorDoc.getElementById("editor-body");
+
+        currId = dock.populateEditorHTML(editorDoc);
+
+        /*TODO: populate the termsHTML as well.  In first round of implementation
+        *  I'm focusing specifically on the editor window, so this will be done later*/
     }
+
+
+//    /**
+//     * This is the main method that actually initializes the
+//     * editor.  This syncs the editor complex with the
+//     * equationEditorController and tells this controller
+//     * what the current id is
+//     *
+//     * @param _editorComplex
+//     */
+//    public void initEditorComplex(EditorComplex _editorComplex) {
+//        editorComplex = _editorComplex;
+//        dock = editorComplex.getDock();
+////        editorComplex.newLine();
+////        currId = dock.getCurrentId();
+//        Document doc = editorEngine.getDocument();
+//        Element body = doc.getElementById("editor-body");
+//        Element newHtmlLine = doc.createElement("span");
+//        newHtmlLine.setAttribute("id", Integer.toString(currId));
+//        newHtmlLine.setAttribute("class", "line");
+//    }
     
     
 }

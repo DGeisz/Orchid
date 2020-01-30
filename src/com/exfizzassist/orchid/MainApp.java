@@ -27,34 +27,18 @@ public class MainApp extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Orchid");
 
-        //Set app icon
+        /*TODO: Set the application icon*/
 //        this.primaryStage.getIcons().add();
 
+        /*Build the outer architecture of the application*/
         initRootLayout();
 
-        /* The editor complex encapsulates everything thats going on in the editor,
-        * so when adding persistence, this is the place to do it.*/
+        /* TODO: Determine if there's persistence, and load
+        *   an EditorComplex specific to the persisted file.*/
         editorComplex = new EditorComplex();
+
+        /* Populate the root layout with the editor*/
         showEquationEditor();
-/*        ***WebView Code***
-        WebView webView = new WebView();
-
-        WebEngine webEngine = webView.getEngine();
-        String content = "<math displaystyle=\"true\"> \n" +
-            "\n" +
-            "  <munderover >\n" +
-            "    <mo> &#x222B; <!--INTEGRAL--> </mo>\n" +
-            "    <mn> 0 </mn>\n" +
-            "    <mi> &#x221E; <!--INFINITY--> </mi>\n" +
-            "  </munderover>\n" +
-            "\n" +
-            "</math>";
-
-        webEngine.loadContent(content, "text/html");
-        webView.getEngine().load("http://google.com");
-
-        VBox vBox = new VBox(webView);
-        Scene scene = new Scene(vBox, 960, 600);*/
     }
 
     /**
@@ -62,16 +46,16 @@ public class MainApp extends Application {
      */
     public void initRootLayout() {
         try {
-            // Load root layout from fxml file.
+            /* Load root layout from fxml file. */
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
-            // Show the scene containing the root layout.
+            /* Show the scene containing the root layout. */
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
 
-            // Give the controller access to the main app.
+            /* Give the controller access to the main app. */
             RootLayoutController controller = loader.getController();
             controller.setMainApp(this);
 
@@ -90,13 +74,17 @@ public class MainApp extends Application {
             loader.setLocation(MainApp.class.getResource("view/EquationEditor.fxml"));
             AnchorPane equationEditor = (AnchorPane) loader.load();
 
-            // Set main equation editor into the center of root layout.
+            /* Set main equation editor into the center of root layout. */
             rootLayout.setCenter(equationEditor);
 
-            //Give equation editor access to the main app.
+            /*Create new equationEditorController*/
             EquationEditorController editorController = loader.getController();
+
+            /* Give equation editor access to the main app. */
             editorController.setMainApp(this);
-            editorController.setEditorComplex(editorComplex);
+
+            /* Use the editorComplex to configure the EquationEditorController */
+            editorComplex.configureEditorController(editorController);
 
         } catch (IOException e) {
             e.printStackTrace();

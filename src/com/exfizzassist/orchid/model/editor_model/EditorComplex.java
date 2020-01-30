@@ -2,6 +2,7 @@ package com.exfizzassist.orchid.model.editor_model;
 
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
+import com.exfizzassist.orchid.view.EquationEditorController;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,5 +42,9 @@ public class EditorComplex {
 
     public Dock getDock() {
         return dock;
+    }
+
+    public void configureEditorController(EquationEditorController editorController) {
+        editorController.latchOntoDock(dock);
     }
 }

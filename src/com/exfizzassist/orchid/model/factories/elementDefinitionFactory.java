@@ -8,17 +8,22 @@ import java.util.ArrayList;
 
 public class elementDefinitionFactory extends OrchidFactory {
 
-    elementDefinitionFactory() {
-        sockets = new ArrayList<>();
-        sockets.add(new DefinitionSocket());
-        sockets.add(new SetSocket());
-    }
-
+    elementDefinitionFactory() {}
 
     @Override
-    int[] socketConfigure(int lastId, int currId) {
-        sockets.get(0).setId(currId, lastId, currId + 1);
-        sockets.get(1).setId(currId + 1, currId, currId + 2);
-        return new int[]{currId + 1, currId + 2};
+    int[] socketConfigure(int lastId, int nextId) {
+        return new int[0];
     }
+//        sockets = new ArrayList<>();
+//        sockets.add(new DefinitionSocket());
+//        sockets.add(new SetSocket());
+//    }
+//
+//
+//    @Override
+//    int[] socketConfigure(int lastId, int currId) {
+//        sockets.get(0).setId(currId, lastId, currId + 1);
+//        sockets.get(1).setId(currId + 1, currId, currId + 2);
+//        return new int[]{currId + 1, currId + 2};
+//    }
 }

@@ -11,8 +11,11 @@ public class CartesianProductSet extends OrchidSet {
     ArrayList<OrchidSet> setFactors;
 
     CartesianProductSet(String unparsed) {
+        this.identifier = unparsed;
+    }
 
-        this.identifier =
+    CartesianProductSet(ArrayList<OrchidSet> factors) {
+        setFactors = factors;
     }
 
     @Override
