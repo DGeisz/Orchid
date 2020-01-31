@@ -28,10 +28,6 @@ public class Dock {
      */
     private OrchidSocket dockedSocket;
 
-    /**
-     * This is the line
-     */
-    private OrchidLine line;
 
     /**
      * Id of the current element
@@ -49,14 +45,13 @@ public class Dock {
     private String prevId;
 
     /** Initializes Dock with an editorComplex*/
-    public Dock(EditorComplex _editorComplex) {
+    Dock(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
-        ArrayList<String> ids = editorComplex.getCurrentPage().getIdList();
+        ArrayList<String> ids = editorComplex.getCurrentPage().getLastIds();
         prevId = ids.get(0);
         currId = ids.get(1);
         nextId = ids.get(2);
-        line = editorComplex.getCurrentPage().getCurrentLine();
-        dockedSocket = line.currentSocket();
+        dockedSocket = editorComplex.getCurrentPage().getCurrentLine().currentSocket();
     }
 
     /**
@@ -96,7 +91,8 @@ public class Dock {
         Element body = editorDoc.getElementById("editor-body");
         /* Determine if the body has any children, i.e html is already populated.*/
         if (body.getChildNodes().getLength() == 0) {
-            return editorComplex.getCurrentPage.populateEditorHTML(editorDoc);
+            editorComplex.getCurrentPage().populateEditorHTML(editorDoc);
+            return currId;
 
             /*TODO: Delete all this after implementing OrchidPage*/
             /* TODO: EPOCH II: Handle persisted information.  For now, treturns 1*/
@@ -145,7 +141,12 @@ public class Dock {
      * RETURNS the next id for the controller to populate.
      */
     public String commitSequence(String sequence, Document document) {
-        return dockedSocket.commitSequence(sequence, document, currId, nextId);
+        ArrayList<String> ids = dockedSocket.commitSequence(sequence, document, currId, nextId);
+        prevId = ids.get(0);
+        currId = ids.get(1);
+        nextId = ids.get(2);
+        dockedSocket = editorComplex.getSocket(currId);
+        return currId;
     }
 
     /**
