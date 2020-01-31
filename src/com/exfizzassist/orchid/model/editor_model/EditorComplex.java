@@ -9,19 +9,26 @@ import java.util.HashMap;
 
 public class EditorComplex {
 
-    /** Registry of all defined terms in the current session
+    /**
+     * Registry of all defined terms in the current session
      * and the sets to which they correspond
      */
     HashMap<String, OrchidSet> termRegistry;
 
-    /** Registry of all sockets, where each socket is accessed
-     * by its ID */
-    HashMap<Integer, OrchidSocket> socketRegistry;
+    /**
+     * Registry of all sockets, where each socket is accessed
+     * by its ID
+     */
+    HashMap<String, OrchidSocket> socketRegistry;
 
-    /** List of all lines defined within the editor*/
-    ArrayList<OrchidLine> editorLines;
+    /**
+     * List of all pages contained within the editor
+     */
+    ArrayList<OrchidPage> pageList;
 
-    /** The editor dock. This bad boi is super important*/
+    /**
+     * The editor dock. This bad boi is super important
+     */
     Dock dock;
 
 
@@ -29,14 +36,14 @@ public class EditorComplex {
         dock = new Dock(this);
         termRegistry = new HashMap<>();
         socketRegistry = new HashMap<>();
-        editorLines = new ArrayList<>();
+        pageList = new ArrayList<>();
     }
 
     public HashMap<String, OrchidSet> getTermRegistry() {
         return termRegistry;
     }
 
-    public HashMap<Integer, OrchidSocket> getSocketRegistry() {
+    public HashMap<String, OrchidSocket> getSocketRegistry() {
         return socketRegistry;
     }
 

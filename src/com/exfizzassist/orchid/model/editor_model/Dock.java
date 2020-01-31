@@ -13,27 +13,61 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 public class Dock {
 
-    /** This is the dock's parent editor complex*/
+    /**
+     * This is the dock's parent editor complex
+     */
     private EditorComplex editorComplex;
 
-    /** This is the socket that is docked to the dock, and whose contents
-     * can be manipulated*/
+    /**
+     * This is the socket that is docked to the dock, and whose contents
+     * can be manipulated
+     */
     private OrchidSocket dockedSocket;
 
-    /** This is the line */
+    /**
+     * This is the line
+     */
     private OrchidLine line;
 
+    /**
+     * Id of the current element
+     */
+    private String currId;
+
+    /**
+     * Id of the next element
+     */
+    private String nextId;
+
+    /**
+     * Id of the previous element
+     */
+    private String prevId;
+
+    /** Initializes Dock with an editorComplex*/
     public Dock(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
+        ArrayList<String> ids = editorComplex.getCurrentPage().getIdList();
+        prevId = ids.get(0);
+        currId = ids.get(1);
+        nextId = ids.get(2);
+        line = editorComplex.getCurrentPage().getCurrentLine();
+        dockedSocket = line.currentSocket();
     }
 
-    /** Return a string corresponding to a css class which holds
-     * a font color appropriate for the current status*/
+    /**
+     * Return a string corresponding to a css class which holds
+     * a font color appropriate for the current status
+     */
     public String sequenceStatus(String sequence) {
         /*TODO: PHASE I: Implement*/
+
+        return dockedSocket.sequenceStatus(sequence);
+
 //        if (dockedSocket == null) {
 //            LineState lineState = line.sequenceStatus(sequence, editorComplex
 //                .getTermRegistry()
@@ -41,18 +75,19 @@ public class Dock {
 //            return OrchidLine.stateMap.get(lineState);
 //        }
         /*TODO: Delete this basic functionality*/
-        if (sequence.equals("map")) {
-            return "defined";
-        } else {
-            return "in-progress";
-        }
+//            if (sequence.equals("map")) {
+//                return "defined";
+//            } else {
+//                return "in-progress";
+//            }
     }
 
     /**
      * Takes in the skeleton editor DOM and populates it with
      * html.  The html is either new, or it is loaded from a persisted file in
-     * some capacity.  */
-    public int populateEditorHTML(Document editorDoc) {
+     * some capacity.
+     */
+    public String populateEditorHTML(Document editorDoc) {
         try {
             printDocument(editorDoc, System.out);
         } catch (IOException | TransformerException e) {
@@ -61,23 +96,24 @@ public class Dock {
         Element body = editorDoc.getElementById("editor-body");
         /* Determine if the body has any children, i.e html is already populated.*/
         if (body.getChildNodes().getLength() == 0) {
-//            body.set
-            /* TODO: EPOCH II: Handle persisted information.  For now, this simply adds
-            *   a span corresponding to a new editor line with id 1 and returns 1*/
-            Element newHtmlLine = editorDoc.createElement("span");
-            newHtmlLine.setAttribute("id", Integer.toString(1));
-            newHtmlLine.setAttribute("class", "line");
-            body.appendChild(newHtmlLine);
-            try {
-                printDocument(editorDoc, System.out);
-            } catch (IOException | TransformerException e) {
-                System.out.println(e);
-            }
-            return 1;
+            return editorComplex.getCurrentPage.populateEditorHTML(editorDoc);
+
+            /*TODO: Delete all this after implementing OrchidPage*/
+            /* TODO: EPOCH II: Handle persisted information.  For now, treturns 1*/
+//            Element newHtmlLine = editorDoc.createElement("span");
+//            newHtmlLine.setAttribute("id", Integer.toString(1));
+//            newHtmlLine.setAttribute("class", "line");
+//            body.appendChild(newHtmlLine);
+//            try {
+//                printDocument(editorDoc, System.out);
+//            } catch (IOException | TransformerException e) {
+//                System.out.println(e);
+//            }
+//            return "1";
 
         } else {
             /*TODO: EPOCH II: Handle an already populated */
-            return 1;
+            return "1";
         }
     }
 
@@ -86,9 +122,9 @@ public class Dock {
      * the equation model to handle a backspace on an empty
      * socket, or an already committed sequence.  The only
      */
-    public int handleBackSpace(Document document) {
+    public String handleBackSpace(Document document) {
         /*TODO: PHASE II: Implement this actual method.  For now this just returns 1*/
-        return 1;
+        return "1";
     }
 
     /**
@@ -99,8 +135,7 @@ public class Dock {
      * @param sequence
      */
     public boolean isAllowedSequence(String sequence) {
-        /*TODO: PHASE I: Implement*/
-        return true;
+        return dockedSocket.isAllowedSequence(sequence);
     }
 
     /**
@@ -109,12 +144,13 @@ public class Dock {
      * corresponding to the structure to which SEQUENCE corresponds
      * RETURNS the next id for the controller to populate.
      */
-    public int commitSequence(String sequence, Document document) {
-        /*TODO: PHASE I: Implement*/
-        return 1;
+    public String commitSequence(String sequence, Document document) {
+        return dockedSocket.commitSequence(sequence, document, currId, nextId);
     }
 
-    /** Helper method to print contents of a DOM.*/
+    /**
+     * Helper method to print contents of a DOM.
+     */
     private static void printDocument(Document doc, OutputStream out) throws IOException, TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();

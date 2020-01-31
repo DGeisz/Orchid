@@ -38,7 +38,7 @@ public class EquationEditorController {
     /**
      * Id of current object being created
      */
-    private int currId;
+    private String currId;
 
     /**
      * Id of the previous object being created
@@ -66,7 +66,7 @@ public class EquationEditorController {
      * Called before the initialize() method.
      * */
     public EquationEditorController() {
-        currId = 0;
+        currId = "";
         currSequence = "";
     }
 
@@ -113,7 +113,7 @@ public class EquationEditorController {
      */
     private void handleNewKey(Document doc, KeyEvent event) {
         if (!handled) {
-            currElement = doc.getElementById(Integer.toString(currId));
+            currElement = doc.getElementById(currId);
             currSequence += event.getCharacter();
             currElement.setTextContent(currSequence);
         }
@@ -126,7 +126,7 @@ public class EquationEditorController {
      * Handles special keys like backspace otherwise
      */
     private void handleSpecialKeys(Document doc, KeyEvent event) {
-        currElement = doc.getElementById(Integer.toString(currId));
+        currElement = doc.getElementById(currId);
 
         if (event.getCode().equals(KeyCode.BACK_SPACE)) {
             /*TODO: PHASE II: implement deletion from controller side*/
@@ -143,8 +143,7 @@ public class EquationEditorController {
                 currId = dock.commitSequence(currSequence, doc);
                 currSequence = "";
             } else {
-                ;
-                /*TODO: PHASE I: Implement behavior when current sequence is not allowed*/
+                currElement.setAttribute("class", "undefined");
 
             }
         }

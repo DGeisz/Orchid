@@ -33,9 +33,11 @@ public class MainApp extends Application {
         /*Build the outer architecture of the application*/
         initRootLayout();
 
-        /* TODO: Determine if there's persistence, and load
+        /* TODO: EPOCH II: Determine if there's persistence, and load
         *   an EditorComplex specific to the persisted file.*/
         editorComplex = new EditorComplex();
+
+        /*Display the primary stage*/
         primaryStage.show();
 
         /* Populate the root layout with the editor*/

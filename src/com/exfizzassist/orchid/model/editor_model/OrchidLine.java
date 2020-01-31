@@ -38,15 +38,4 @@ public class OrchidLine {
 
     OrchidLine() {
     }
-
-    public LineState sequenceStatus(String sequence, Boolean isDefinedTerm) {
-        if (isDefinedTerm) {
-            return LineState.TERM;
-        } else if (emptySequences.contains(sequence)) {
-            return LineState.DEFINITION;
-        }
-        return LineState.UNDEFINED;
-    }
-
-
 }
