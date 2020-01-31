@@ -36,6 +36,7 @@ public class MainApp extends Application {
         /* TODO: Determine if there's persistence, and load
         *   an EditorComplex specific to the persisted file.*/
         editorComplex = new EditorComplex();
+        primaryStage.show();
 
         /* Populate the root layout with the editor*/
         showEquationEditor();
@@ -72,7 +73,7 @@ public class MainApp extends Application {
         try {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(MainApp.class.getResource("view/EquationEditor.fxml"));
-            AnchorPane equationEditor = (AnchorPane) loader.load();
+            AnchorPane equationEditor = loader.load();
 
             /* Set main equation editor into the center of root layout. */
             rootLayout.setCenter(equationEditor);

@@ -2,7 +2,7 @@ package com.exfizzassist.orchid.view;
 
 import com.exfizzassist.orchid.MainApp;
 import com.exfizzassist.orchid.model.editor_model.Dock;
-import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -19,9 +19,6 @@ public class EquationEditorController {
 
     /** Reference to the main application*/
     private MainApp mainApp;
-
-    /** Reference to the editor complex*/
-    private EditorComplex editorComplex;
     
     /** Reference to the equation dock*/
     private Dock dock;
@@ -83,9 +80,10 @@ public class EquationEditorController {
         editorEngine = mainEditor.getEngine();
         termsEngine = workingTerms.getEngine();
 
+
         /*Skeleton content for the current windows*/
-        String editorContent = "<html><body id=\"editor-body\"></body></html>";
-        String termsContent = "<html><body id=\"terms-body\"></body></html>";
+        String editorContent = "<html><body id='editor-body'></body></html>";
+        String termsContent = "<html><body id='terms-body'></body></html>";
 
         /* Loads Stylesheet for the editor window*/
         editorEngine.setUserStyleSheetLocation(getClass().getResource("../style/WebViewStyle.css").toString());
@@ -93,6 +91,7 @@ public class EquationEditorController {
         /* Loads the starting content of this session*/
         editorEngine.loadContent(editorContent, "text/html");
         termsEngine.loadContent(termsContent, "text/html");
+
 
         /* The following commands tell the windows what to do when keys are typed*/
         mainEditor.setOnKeyTyped(event -> {
@@ -104,8 +103,6 @@ public class EquationEditorController {
             Document doc = editorEngine.getDocument();
             handleSpecialKeys(doc, event);
         });
-
-
     }
 
     /**
@@ -116,13 +113,12 @@ public class EquationEditorController {
      */
     private void handleNewKey(Document doc, KeyEvent event) {
         if (!handled) {
-            currElement = (Element) doc.getElementsByTagName("body").item(0);
-//            currElement = doc.getElementById(Integer.toString(currId));
+            currElement = doc.getElementById(Integer.toString(currId));
             currSequence += event.getCharacter();
             currElement.setTextContent(currSequence);
         }
 
-        currElement.setAttribute("class", "defined");//dock.sequenceStatus(currSequence));
+        currElement.setAttribute("class", dock.sequenceStatus(currSequence));
         handled = false;
     }
 
@@ -130,15 +126,27 @@ public class EquationEditorController {
      * Handles special keys like backspace otherwise
      */
     private void handleSpecialKeys(Document doc, KeyEvent event) {
-//        currElement = doc.getElementById(Integer.toString(currId));
-        currElement = (Element) doc.getElementsByTagName("body").item(0);
+        currElement = doc.getElementById(Integer.toString(currId));
 
         if (event.getCode().equals(KeyCode.BACK_SPACE)) {
+            /*TODO: PHASE II: implement deletion from controller side*/
+            /*This is basic functionality to delete a char.  Change when
+            * you actually implement this*/
             if (currSequence.length() > 0) {
                 currSequence = currSequence.substring(0, currSequence.length() - 1);
                 currElement.setTextContent(currSequence);
             }
+            /*End of basic implementation.*/
             handled = true;
+        } else if (event.getCode().equals(KeyCode.ENTER)) {
+            if (dock.isAllowedSequence(currSequence)) {
+                currId = dock.commitSequence(currSequence, doc);
+                currSequence = "";
+            } else {
+                ;
+                /*TODO: PHASE I: Implement behavior when current sequence is not allowed*/
+
+            }
         }
     }
 
@@ -154,7 +162,7 @@ public class EquationEditorController {
     }
 
     /**
-     * This takes the DOCK from the editorComplex
+     * This takes the _DOCK from the editorComplex
      * and gives the dock access to the skeleton
      * HTML of the editor and terms.  The dock then populates the
      * skeletons with the initial HTML and tells the controller
@@ -164,13 +172,17 @@ public class EquationEditorController {
         dock = _dock;
 
         /* Allows the dock to populate the skeleton html and tell
-        * this controller the currId*/
-        Document editorDoc = editorEngine.getDocument();
-        Element body = editorDoc.getElementById("editor-body");
+        * this controller the currId. The whole getLoadWorker nonsense
+        * is in place so populateEditorHTML is called after the webengine
+        * loads */
+        editorEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
+            if (newState == Worker.State.SUCCEEDED) {
+                Document editorDoc = editorEngine.getDocument();
+                currId = dock.populateEditorHTML(editorDoc);
+            }
+        });
 
-        currId = dock.populateEditorHTML(editorDoc);
-
-        /*TODO: populate the termsHTML as well.  In first round of implementation
+        /*TODO: EPOCH I: PHASE Lambda. Populate the termsHTML as well.  In first round of implementation
         *  I'm focusing specifically on the editor window, so this will be done later*/
     }
 
