@@ -9,23 +9,35 @@ public class OrchidPage {
     /**
      * Reference to its parent editor complex
      */
-    EditorComplex editorComplex;
+    private EditorComplex editorComplex;
 
     /**
      * List of all lines a page contains
      */
-    ArrayList<OrchidLine> lineList;
+    private ArrayList<OrchidLine> lineList;
 
     /**
      * The current line being edited
      */
-    OrchidLine currLine;
+    private OrchidLine currLine;
+
+    /**
+     * Starting Id of the page
+     */
+    private String startPageId;
+
+    /**
+     * Ending Id of the page
+     */
+    private String endPageId;
 
     /**
      * Initializes a new page with a given _EDITORCOMPLEX
      */
     OrchidPage(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
+        startPageId = editorComplex.newId();
+        endPageId = editorComplex.newId();
         currLine = new OrchidLine();
         lineList.add(currLine);
     }

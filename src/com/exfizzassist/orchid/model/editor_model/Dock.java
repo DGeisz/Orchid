@@ -51,7 +51,7 @@ public class Dock {
         prevId = ids.get(0);
         currId = ids.get(1);
         nextId = ids.get(2);
-        dockedSocket = editorComplex.getCurrentPage().getCurrentLine().currentSocket();
+        dockedSocket = editorComplex.getCurrentPage().getCurrentLine().firstUnfilledSocket();
     }
 
     /**
