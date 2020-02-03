@@ -9,17 +9,21 @@ public abstract class OrchidSocket {
     /**
      * Id of the socket
      */
-    int id;
+    private String id;
 
     /**
      * Id of the next socket
      */
-    int nextId;
+    private String nextId;
 
     /**
      * Id of the previous socket
      */
-    int prevId;
+    private String prevId;
+
+    /**
+     * Id of the parent element
+     * (could be line, other socket*/
 
     /**
      * The factory to which this socket connects
@@ -27,13 +31,26 @@ public abstract class OrchidSocket {
     OrchidFactory parent;
 
     /**
-     * Sets the three id references
+     * @return id
      */
-    public void setId(int id, int prevId, int nextId) {
-        this.id = id;
-        this.prevId = prevId;
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets next id
+     */
+    public void setNextId(String nextId) {
         this.nextId = nextId;
     }
+
+    /**
+     * Sets the previous id
+     */
+    public void setPrevId(String prevId) {
+        this.prevId = prevId;
+    }
+
 
     /**
      * Takes in a string SEQUENCE and outputs the

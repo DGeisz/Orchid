@@ -1,12 +1,13 @@
 package com.exfizzassist.orchid.model.editor_model;
 
+import com.exfizzassist.orchid.model.factories.LineFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 
 public class OrchidPage {
 
-    /*TODO:  PHASE I (Mostly a reminder) BIG ONE.  FIGURE OUT How to allocate ids*/
 
     /**
      * Reference to its parent editor complex
@@ -16,32 +17,31 @@ public class OrchidPage {
     /**
      * List of all lines a page contains
      */
-    private ArrayList<OrchidLine> lineList;
+    private ArrayList<LineFactory> lineList;
 
     /**
      * The current line being edited
      */
-    private OrchidLine currLine;
+    private LineFactory currLine;
+
+    /** Gives a reference to last id in the current
+     * line.  Used when creating new lines*/
+    private String lastId;
 
     /**
-     * Starting Id of the page
+     * The id of the page
      */
-    private String startPageId;
+    private String pageId;
 
-    /**
-     * Ending Id of the page
-     */
-    private String endPageId;
 
     /**
      * Initializes a new page with a given _EDITORCOMPLEX
      */
     OrchidPage(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
-        startPageId = editorComplex.newId();
-        endPageId = editorComplex.newId();
-        currLine = new OrchidLine();
-        lineList.add(currLine);
+        pageId = editorComplex.newId();
+        lineList = new ArrayList<>();
+        newLine();
     }
 
     /**
@@ -55,7 +55,7 @@ public class OrchidPage {
     /**
      * @return currLine
      */
-    OrchidLine getCurrentLine() {
+    LineFactory getCurrentLine() {
         return currLine;
     }
 
@@ -65,8 +65,27 @@ public class OrchidPage {
      * the last unfilled Id.
      */
     void populateEditorHTML(Document document) {
-        for (OrchidLine line : lineList) {
+        Element body = document.getElementById("editor-body");
+        Element pageHtml = document.createElement("span");
+        pageHtml.setAttribute("class", "page");
+        pageHtml.setAttribute("id", pageId);
+        body.appendChild(pageHtml);
+        for (LineFactory line : lineList) {
             line.populateHTML(document);
         }
+    }
+
+    /**
+     * Creates a new line and appends the line to lineList
+     */
+    void newLine() {
+        if (lineList.isEmpty()) {
+            lineList.add(new LineFactory(editorComplex, pageId));
+            lastId = lineList.get(0).lastId();
+        } else {
+            lineList.add(new LineFactory(lastId, editorComplex, pageId));
+            lastId = lineList.get(lineList.size() - 1).lastId();
+        }
+
     }
 }

@@ -89,8 +89,11 @@ public class EditorComplex {
         return socketRegistry.get(id);
     }
 
-
-    public void configureEditorController(EquationEditorController editorController) {
-        editorController.latchOntoDock(dock);
+    /**
+     * @returns new id*/
+    public String newId() {
+        /*TODO: Implement this method.  Everything relies on this method*/
+        return "";
     }
+
 }

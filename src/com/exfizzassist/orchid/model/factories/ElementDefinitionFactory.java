@@ -6,9 +6,9 @@ import com.exfizzassist.orchid.model.sockets.SetSocket;
 
 import java.util.ArrayList;
 
-public class elementDefinitionFactory extends OrchidFactory {
+public class ElementDefinitionFactory extends OrchidFactory {
 
-    elementDefinitionFactory() {}
+    ElementDefinitionFactory() {}
 
     @Override
     int[] socketConfigure(int lastId, int nextId) {
