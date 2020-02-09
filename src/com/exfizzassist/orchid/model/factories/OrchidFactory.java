@@ -11,16 +11,17 @@ public abstract class OrchidFactory {
     /**
      * Id of the factory
      */
-    private String id;
+    String id;
 
     /**
      * Id of the DOM parent element
      */
-    private String parentId;
+    String parentId;
 
     /**
-     * Reference to the editor complex*/
-    private EditorComplex editorComplex;
+     * Reference to the editor complex
+     */
+    EditorComplex editorComplex;
 
     public OrchidFactory(EditorComplex _editorComplex, String parentId) {
         this.parentId = parentId;
@@ -34,5 +35,10 @@ public abstract class OrchidFactory {
      * elements are children of parendId
      */
     abstract void populateHTML(Document document);
+
+    /**Get id*/
+    public String getId() {
+        return id;
+    }
 
 }

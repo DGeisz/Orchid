@@ -1,11 +1,15 @@
 package com.exfizzassist.orchid.model.editor_model;
 
 import com.exfizzassist.orchid.model.factories.LineFactory;
+import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 
+/**Represents one editor page.  You know how you
+ * can have multiple tabs?  Yeah like that,
+ * but with pages.*/
 public class OrchidPage {
 
 
@@ -83,7 +87,8 @@ public class OrchidPage {
             lineList.add(new LineFactory(editorComplex, pageId));
             lastId = lineList.get(0).lastId();
         } else {
-            lineList.add(new LineFactory(lastId, editorComplex, pageId));
+            OrchidSocket prevLineLastSocket = lineList.get(lineList.size() - 1).getEndLineSocket();
+            lineList.add(new LineFactory(lastId, prevLineLastSocket, editorComplex, pageId));
             lastId = lineList.get(lineList.size() - 1).lastId();
         }
 

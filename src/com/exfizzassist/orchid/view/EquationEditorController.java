@@ -144,7 +144,6 @@ public class EquationEditorController {
                 currSequence = "";
             } else {
                 currElement.setAttribute("class", "undefined");
-
             }
         }
     }

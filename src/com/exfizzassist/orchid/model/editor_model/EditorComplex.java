@@ -1,5 +1,7 @@
 package com.exfizzassist.orchid.model.editor_model;
 
+import com.exfizzassist.orchid.model.factories.OrchidFactory;
+import com.exfizzassist.orchid.model.factories.TermDefinitionFactory;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.view.EquationEditorController;
@@ -13,28 +15,43 @@ public class EditorComplex {
      * Registry of all defined terms in the current session
      * and the sets to which they correspond
      */
-    HashMap<String, OrchidSet> termRegistry;
+    private HashMap<String, OrchidSet> termRegistry;
 
     /**
      * Registry of all sockets, where each socket is accessed
      * by its ID
      */
-    HashMap<String, OrchidSocket> socketRegistry;
+    private HashMap<String, OrchidSocket> socketRegistry;
+
+    /**
+     * Registry of all defined sets*/
+    private ArrayList<OrchidSet> setRegistry;
 
     /**
      * List of all pages contained within the editor
      */
-    ArrayList<OrchidPage> pageList;
+    private ArrayList<OrchidPage> pageList;
 
     /**
      * The current editor page
      */
-    OrchidPage currPage;
+    private OrchidPage currPage;
 
     /**
      * The editor dock. This bad boi is super important
      */
-    Dock dock;
+    private Dock dock;
+
+    /**
+     * ArrayList of built in sequences
+     */
+    private static ArrayList<String> builtInSeq;
+
+    static {
+        builtInSeq.add("termDef");
+        builtInSeq.add("mapDef");
+        builtInSeq.add("setDef");
+    }
 
     /**
      * Initializes a fresh editor environment where nothing
@@ -62,7 +79,6 @@ public class EditorComplex {
      * @return socketRegistry
      */
     public HashMap<String, OrchidSocket> getSocketRegistry() {
-
         return socketRegistry;
     }
 
@@ -90,10 +106,54 @@ public class EditorComplex {
     }
 
     /**
-     * @returns new id*/
+     * @returns new id
+     */
     public String newId() {
         /*TODO: Implement this method.  Everything relies on this method*/
         return "";
+    }
+
+    /**
+     * Takes in the EquationEditorController and
+     * latches the controller to the dock
+     */
+    public void configureEditorController(EquationEditorController controller) {
+        controller.latchOntoDock(dock);
+    }
+
+    /**
+     * Adds a new socket to the socketRegistry
+     */
+    public void addSocketToRegistry(OrchidSocket socket, String id) {
+        socketRegistry.put(id, socket);
+    }
+
+    /**
+     * RETURNS true if SEQUENCE is built in to the
+     * system
+     */
+    public boolean isBuiltIn(String sequence) {
+        return builtInSeq.contains(sequence);
+    }
+
+    /**
+     * RETURNS true if SEQUENCE is in the termRegistry
+     */
+    public boolean isDefinedTerm(String sequence) {
+        return termRegistry.containsKey(sequence);
+    }
+
+    /**
+     * RETURNS true if once parsed, SEQUENCE
+     * corresponds to a map
+     */
+    public boolean isMapBuilder(String sequence) {
+        sequence = sequence.replaceAll("\\s", "");
+        if (sequence.length() >= 3 && sequence.substring(sequence.length() - 2).equals("()")) {
+            sequence = sequence.substring(0, sequence.length() - 2);
+            return isDefinedTerm(sequence) && termRegistry.get(sequence).isMapSet();
+        }
+        return false;
     }
 
 }

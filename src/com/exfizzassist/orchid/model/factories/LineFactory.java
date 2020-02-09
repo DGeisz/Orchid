@@ -33,15 +33,6 @@ public class LineFactory extends OrchidFactory{
      */
     private EndLineSocket endLineSocket;
 
-    /**
-     * Reference to the editor complex
-     */
-    private EditorComplex editorComplex;
-
-    /**
-     * ID of the parent page to this line
-     */
-    private String parentPageId;
 
     /**
      * ID of this current line
@@ -51,21 +42,23 @@ public class LineFactory extends OrchidFactory{
     /*TODO: Figure out how to initialize a socket so
     *  that it has the correct ids*/
 
-    LineFactory(String prevLineId, EditorComplex _editorComplex, String pageId) {
+    public LineFactory(String prevLineId, OrchidSocket lastSocket, EditorComplex _editorComplex, String pageId) {
         this(_editorComplex, pageId);
+        contentSocket.setPrevId(lastSocket.getId());
+        lastSocket.setNextId(contentSocket.getNextId());
         this.prevLineId = prevLineId;
     }
 
-    LineFactory(EditorComplex _editorComplex, String pageId) {
-
-        editorComplex = _editorComplex;
-        parentPageId = pageId;
+    public LineFactory(EditorComplex _editorComplex, String pageId) {
+        super(_editorComplex, pageId);
         this.prevLineId = "";
         lineId = editorComplex.newId();
-        contentSocket = new LineSocket();
-        endLineSocket = new EndLineSocket();
+        contentSocket = new LineSocket(editorComplex, this);
+        endLineSocket = new EndLineSocket(editorComplex, this);
+        contentSocket.setPrevId("");
         contentSocket.setNextId(endLineSocket.getId());
         endLineSocket.setPrevId(contentSocket.getId());
+        endLineSocket.setNextId("");
     }
 
     /**
@@ -93,10 +86,11 @@ public class LineFactory extends OrchidFactory{
      */
     @Override
     public void populateHTML(Document document) {
-        Element pageElement = document.getElementById(parentPageId);
+        Element pageElement = document.getElementById(parentId);
         Element lineHtml = document.createElement("span");
         lineHtml.setAttribute("class", "line");
         lineHtml.setAttribute("id", lineId);
+        pageElement.appendChild(lineHtml);
         contentSocket.populateHTML(document);
         endLineSocket.populateHTML(document);
     }
@@ -105,13 +99,17 @@ public class LineFactory extends OrchidFactory{
      * @returns either content socket or the first non-empty
      * child of the content socket
      */
-    OrchidSocket firstUnfilledSocket() {
+    public OrchidSocket firstUnfilledSocket() {
         if (!contentSocket.plugged()) {
             return contentSocket;
-        } else if (!contentSocket.fullyPlugged()) {
+        } else if (!contentSocket.isFullyPlugged()) {
             return endLineSocket;
         }
         return contentSocket.firstUnfilledSocket();
     }
 
+    /**RETURNS the endLineSocket*/
+    public EndLineSocket getEndLineSocket() {
+        return endLineSocket;
+    }
 }

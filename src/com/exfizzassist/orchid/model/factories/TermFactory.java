@@ -1,8 +1,6 @@
 package com.exfizzassist.orchid.model.factories;
 
-import com.exfizzassist.orchid.model.basic_math.AnonymousTerm;
-import com.exfizzassist.orchid.model.basic_math.NamedTerm;
-import com.exfizzassist.orchid.model.basic_math.OrchidTerm;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sets.MapSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 
@@ -13,7 +11,7 @@ public class TermFactory extends OrchidFactory {
     String factoryName;
 
     /** OrchidTerm outputted by this factory*/
-    OrchidTerm spawn;
+    OrchidPlug spawn;
 
     /** OrchidTerm inputted into this factory*/
     OrchidSocket socket;

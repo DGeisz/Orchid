@@ -2,18 +2,22 @@ span {
     font-size: 18pt;
 }
 
-.undefined {
+.red {
     color: red;
 }
 
-.defined {
+.green {
     color: green;
 }
 
-.in-progress {
+.blue {
     color: blue;
 }
 
-.in-limbo {
+.orange {
     color: orange;
+}
+
+.purple {
+    color: purple;
 }
