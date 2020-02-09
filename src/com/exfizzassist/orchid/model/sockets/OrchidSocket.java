@@ -1,6 +1,7 @@
 package com.exfizzassist.orchid.model.sockets;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.editor_model.OrchidPage;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.factories.OrchidFactory;
 import org.w3c.dom.Document;
@@ -111,6 +112,14 @@ public abstract class OrchidSocket {
     abstract public ArrayList<String> commitSequence(String sequence, Document document, String lastId, String nextId);
 
     /**
+     * Plugs the _PLUG into the socket
+     */
+    public void setPlug(OrchidPlug _plug) {
+        plug = _plug;
+        plug.setSocket(this);
+    }
+
+    /**
      * RETURNS true if the socket is plugged by a term
      */
     public boolean plugged() {
@@ -138,5 +147,13 @@ public abstract class OrchidSocket {
             return this;
         }
         return plug.firstUnfilledSocket();
+    }
+
+    /**
+     * Shares ids with the next socket
+     */
+    public void syncWithNext(OrchidSocket nextSocket) {
+        setNextId(nextSocket.getId());
+        nextSocket.setPrevId(getId());
     }
 }

@@ -87,8 +87,7 @@ public class OrchidPage {
             lineList.add(new LineFactory(editorComplex, pageId));
             lastId = lineList.get(0).lastId();
         } else {
-            OrchidSocket prevLineLastSocket = lineList.get(lineList.size() - 1).getEndLineSocket();
-            lineList.add(new LineFactory(lastId, prevLineLastSocket, editorComplex, pageId));
+            lineList.add(new LineFactory(lastId, editorComplex, pageId));
             lastId = lineList.get(lineList.size() - 1).lastId();
         }
 

@@ -1,5 +1,7 @@
 package com.exfizzassist.orchid.model.editor_model;
 
+import com.exfizzassist.orchid.model.factories.EqualityFactory;
+import com.exfizzassist.orchid.model.factories.MapDefinitionFactory;
 import com.exfizzassist.orchid.model.factories.OrchidFactory;
 import com.exfizzassist.orchid.model.factories.TermDefinitionFactory;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
@@ -24,7 +26,8 @@ public class EditorComplex {
     private HashMap<String, OrchidSocket> socketRegistry;
 
     /**
-     * Registry of all defined sets*/
+     * Registry of all defined sets
+     */
     private ArrayList<OrchidSet> setRegistry;
 
     /**
@@ -43,15 +46,24 @@ public class EditorComplex {
     private Dock dock;
 
     /**
+     * Built in sequence names to prevent redundancy
+     */
+    private final String termDef = "termDef";
+    private final String mapDef = "mapDef";
+    private final String setDef = "setDef";
+    private final String equality = "=";
+
+    /**
      * ArrayList of built in sequences
      */
-    private static ArrayList<String> builtInSeq;
+    private final ArrayList<String> builtInSeq = new ArrayList<String>(){{
+        builtInSeq.add(termDef);
+        builtInSeq.add(mapDef);
+        builtInSeq.add(setDef);
+        builtInSeq.add(equality);
+    }};
 
-    static {
-        builtInSeq.add("termDef");
-        builtInSeq.add("mapDef");
-        builtInSeq.add("setDef");
-    }
+
 
     /**
      * Initializes a fresh editor environment where nothing
@@ -106,11 +118,15 @@ public class EditorComplex {
     }
 
     /**
+     * TODO: Make this better, you schmeagerino
+     *
      * @returns new id
      */
+    private int idCount = 0;
+
     public String newId() {
-        /*TODO: Implement this method.  Everything relies on this method*/
-        return "";
+        idCount++;
+        return Integer.toString(idCount);
     }
 
     /**
@@ -154,6 +170,22 @@ public class EditorComplex {
             return isDefinedTerm(sequence) && termRegistry.get(sequence).isMapSet();
         }
         return false;
+    }
+
+    /**
+     * RETURNS a new OrchidFactory corresponding to SEQ
+     */
+    public OrchidFactory factoryBuilder(String seq, String lastSocketId, String nextSocketId) {
+        if (seq.equals(termDef)) {
+            return new TermDefinitionFactory(this, lastSocketId, nextSocketId);
+        } else if (seq.equals(mapDef)) {
+            return new MapDefinitionFactory(this, lastSocketId, nextSocketId);
+        } else if (seq.equals(setDef)) {
+            return new SetDefinitionFactory(this, lastSocketId, nextSocketId);
+        } else if (seq.equals(equality)) {
+            return new EqualityFactory(this, lastSocketId, nextSocketId);
+        }
+        return null;
     }
 
 }

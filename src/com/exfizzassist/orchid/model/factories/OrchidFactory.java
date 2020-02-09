@@ -23,8 +23,7 @@ public abstract class OrchidFactory {
      */
     EditorComplex editorComplex;
 
-    public OrchidFactory(EditorComplex _editorComplex, String parentId) {
-        this.parentId = parentId;
+    public OrchidFactory(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
         id = editorComplex.newId();
     }
@@ -39,6 +38,13 @@ public abstract class OrchidFactory {
     /**Get id*/
     public String getId() {
         return id;
+    }
+
+    /**
+     * Set id
+     */
+    public void setId(String id) {
+        this.id = id;
     }
 
 }

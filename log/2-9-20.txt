@@ -1,0 +1,11 @@
+Ok so I'm almost falling asleep as we speak, but the move right now
+is to implement bare bones of the Factories to de-red line EditorComplex
+After Editor complex is no longer red, start filling in the factories with
+actual implementation.  After that's finished, move onto the individual
+sockets, then to the sets.  Actually plugs might come first.  Also some things to
+note: 1. I'm making the string of socket ids start and end with a line,
+so the first socket of the line's prevId is "" and the last socket of the lines
+nextId is "".  Also I made plugs way more generic, so they're no longer just math
+terms, anything that plugs into a socket.  It might have been a mistake to make
+lines sockets, but now all the definition factories will output a special
+type of plug that corresponds to the new definition.  Whatever. It'll work out.

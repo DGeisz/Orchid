@@ -6,6 +6,25 @@ import org.w3c.dom.Document;
 
 public abstract class OrchidPlug {
     /**
+     * This is the socket into which this plug plugs
+     */
+    private OrchidSocket socket;
+
+    /**
+     * Socket getter
+     */
+    public OrchidSocket getSocket() {
+        return socket;
+    }
+
+    /**
+     * Socket setter
+     */
+    public void setSocket(OrchidSocket socket) {
+        this.socket = socket;
+    }
+
+    /**
      * Returns the first child socket that isn't filled
      * or null if it doesn't have a parent factory
      */

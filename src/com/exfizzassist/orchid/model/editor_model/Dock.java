@@ -62,19 +62,6 @@ public class Dock {
         /*TODO: PHASE I: Implement*/
 
         return dockedSocket.sequenceStatus(sequence);
-
-//        if (dockedSocket == null) {
-//            LineState lineState = line.sequenceStatus(sequence, editorComplex
-//                .getTermRegistry()
-//                .containsKey(sequence));
-//            return OrchidLine.stateMap.get(lineState);
-//        }
-        /*TODO: Delete this basic functionality*/
-//            if (sequence.equals("map")) {
-//                return "defined";
-//            } else {
-//                return "in-progress";
-//            }
     }
 
     /**

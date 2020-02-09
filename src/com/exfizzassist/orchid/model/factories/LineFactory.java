@@ -42,15 +42,14 @@ public class LineFactory extends OrchidFactory{
     /*TODO: Figure out how to initialize a socket so
     *  that it has the correct ids*/
 
-    public LineFactory(String prevLineId, OrchidSocket lastSocket, EditorComplex _editorComplex, String pageId) {
+    public LineFactory(String prevLineId, EditorComplex _editorComplex, String pageId) {
         this(_editorComplex, pageId);
-        contentSocket.setPrevId(lastSocket.getId());
-        lastSocket.setNextId(contentSocket.getNextId());
         this.prevLineId = prevLineId;
     }
 
     public LineFactory(EditorComplex _editorComplex, String pageId) {
-        super(_editorComplex, pageId);
+        super(_editorComplex);
+        setId(pageId);
         this.prevLineId = "";
         lineId = editorComplex.newId();
         contentSocket = new LineSocket(editorComplex, this);

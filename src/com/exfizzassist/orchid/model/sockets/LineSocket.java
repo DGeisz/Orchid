@@ -45,6 +45,8 @@ public class LineSocket extends OrchidSocket{
 
     @Override
     public ArrayList<String> commitSequence(String sequence, Document document, String lastId, String nextId) {
-        return null;
+        if (editorComplex.isBuiltIn(sequence)) {
+
+        }
     }
 }
