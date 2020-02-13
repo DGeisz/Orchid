@@ -34,23 +34,11 @@ public class Dock {
      */
     private String currId;
 
-    /**
-     * Id of the next element
-     */
-    private String nextId;
-
-    /**
-     * Id of the previous element
-     */
-    private String prevId;
 
     /** Initializes Dock with an editorComplex*/
     Dock(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
-        ArrayList<String> ids = editorComplex.getCurrentPage().getLastIds();
-        prevId = ids.get(0);
-        currId = ids.get(1);
-        nextId = ids.get(2);
+        currId = editorComplex.getCurrentPage().getLastId();
         dockedSocket = editorComplex.getCurrentPage().getCurrentLine().firstUnfilledSocket();
     }
 
@@ -128,10 +116,7 @@ public class Dock {
      * RETURNS the next id for the controller to populate.
      */
     public String commitSequence(String sequence, Document document) {
-        ArrayList<String> ids = dockedSocket.commitSequence(sequence, document, currId, nextId);
-        prevId = ids.get(0);
-        currId = ids.get(1);
-        nextId = ids.get(2);
+        currId = dockedSocket.commitSequence(sequence, document);
         dockedSocket = editorComplex.getSocket(currId);
         return currId;
     }

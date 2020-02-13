@@ -5,6 +5,7 @@ import com.exfizzassist.orchid.model.editor_model.OrchidPage;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.factories.OrchidFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 
@@ -38,7 +39,7 @@ public abstract class OrchidSocket {
     /**
      * The factory to which this socket connects
      */
-    OrchidFactory parent;
+    OrchidFactory parentFactory;
 
     /**
      * The term that plugs into this socket
@@ -46,11 +47,11 @@ public abstract class OrchidSocket {
     OrchidPlug plug;
 
     OrchidSocket(EditorComplex _editorComplex, OrchidFactory _parentFactory) {
-        parent = _parentFactory;
+        parentFactory = _parentFactory;
         editorComplex = _editorComplex;
         id = editorComplex.newId();
         editorComplex.addSocketToRegistry(this, id);
-        parentId = parent.getId();
+        parentId = parentFactory.getId();
     }
 
     /**
@@ -88,7 +89,16 @@ public abstract class OrchidSocket {
      * Takes in the editor DOM and populates the DOM
      * with its corresponding HTML
      */
-    abstract public void populateHTML(Document document);
+    public void populateHTML(Document document) {
+        Element parentElement = document.getElementById(parentId);
+        Element thisElement = document.createElement("span");
+        parentElement.appendChild(thisElement);
+        if (plugged()) {
+            plug.populateHTML(document);
+        }else{
+            thisElement.setTextContent("☐");
+        }
+    }
 
     /**
      * Takes in a string SEQUENCE and outputs the
@@ -106,10 +116,10 @@ public abstract class OrchidSocket {
     /**
      * Finds the structure that corresponds to this SEQUENCE
      * and appends HTML to the DOCUMENT corresponding to the
-     * structure type.  Uses LASTID and NEXTID to set the ids of
-     * this sequence in between those of its superstructure
+     * structure type. Returns the ID of the next socket waiting
+     * to be filled.
      */
-    abstract public ArrayList<String> commitSequence(String sequence, Document document, String lastId, String nextId);
+    abstract public String commitSequence(String sequence, Document document);
 
     /**
      * Plugs the _PLUG into the socket
@@ -123,7 +133,7 @@ public abstract class OrchidSocket {
      * RETURNS true if the socket is plugged by a term
      */
     public boolean plugged() {
-        return plug == null;
+        return plug != null;
     }
 
     /**

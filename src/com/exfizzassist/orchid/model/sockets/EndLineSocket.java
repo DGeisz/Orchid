@@ -7,6 +7,7 @@ import org.w3c.dom.Document;
 import java.util.ArrayList;
 
 public class EndLineSocket extends OrchidSocket {
+    /*TODO: PHASE I: Implement this galatic overlord*/
 
     public EndLineSocket(EditorComplex _editorComplex, OrchidFactory _parentFactory) {
         super(_editorComplex, _parentFactory);
@@ -28,7 +29,7 @@ public class EndLineSocket extends OrchidSocket {
     }
 
     @Override
-    public ArrayList<String> commitSequence(String sequence, Document document, String lastId, String nextId) {
+    public String commitSequence(String sequence, Document document) {
         return null;
     }
 }

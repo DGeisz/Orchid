@@ -1,0 +1,16 @@
+Goals of current session:
+
+1. De-red MapDefFact, EqFact, SetDefFact, TermDefFact
+
+2. Implement methods in the sockets
+
+3. Change methods in EquationEditorController to mirror this
+parallel model/view strategy being taken.  So take away notion
+of currSequence and currElement from EquEditorController, and
+add the new method receiveCharacter or addCharacter, or something like
+that.
+
+Log: Ok so I finished 1, and I'm working on 2.  3 is a big deal because
+I'm moving from a strict MVC framework to a software where the model and
+view are deeply intertwined, which helps in persistence (I think).
+Next time, keep working on 2, and add plugs as they become apparent.

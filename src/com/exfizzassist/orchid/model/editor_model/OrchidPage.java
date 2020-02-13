@@ -52,8 +52,8 @@ public class OrchidPage {
      * Returns the last possible set of three consecutive
      * ids from its last line
      */
-    ArrayList<String> getLastIds() {
-        return lineList.get(lineList.size() - 1).getLastIds();
+    String getLastId() {
+        return lineList.get(lineList.size() - 1).getLastId();
     }
 
     /**
