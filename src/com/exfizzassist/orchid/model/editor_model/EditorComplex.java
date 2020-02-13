@@ -1,9 +1,6 @@
 package com.exfizzassist.orchid.model.editor_model;
 
-import com.exfizzassist.orchid.model.factories.EqualityFactory;
-import com.exfizzassist.orchid.model.factories.MapDefinitionFactory;
-import com.exfizzassist.orchid.model.factories.OrchidFactory;
-import com.exfizzassist.orchid.model.factories.TermDefinitionFactory;
+import com.exfizzassist.orchid.model.factories.*;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.view.EquationEditorController;

@@ -8,6 +8,7 @@ import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.SetSocket;
 import com.sun.org.apache.xpath.internal.operations.Or;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class MapDefinitionFactory extends OrchidFactory {
 
@@ -38,11 +39,25 @@ public class MapDefinitionFactory extends OrchidFactory {
         prevSocket.syncWithNext(definitionSocket);
         OrchidSocket nextSocket = _editorComplex.getSocket(nextSocketId);
         outputSocket.syncWithNext(nextSocket);
-
     }
 
     @Override
     void populateHTML(Document document) {
-
+        Element parent = document.getElementById(parentId);
+        Element thisElement = document.createElement("span");
+        thisElement.setAttribute("class", "map-definition-factory");
+        thisElement.setAttribute("id", getId());
+        parent.appendChild(thisElement);
+        definitionSocket.populateHTML(document);
+        Element colon = document.createElement("span");
+        colon.setAttribute("class", "colon");
+        colon.setTextContent(" : ");
+        thisElement.appendChild(colon);
+        inputSocket.populateHTML(document);
+        Element rightArrow = document.createElement("span");
+        rightArrow.setAttribute("class", "right-arrow");
+        rightArrow.setTextContent(" → ");
+        thisElement.appendChild(rightArrow);
+        outputSocket.populateHTML(document);
     }
 }

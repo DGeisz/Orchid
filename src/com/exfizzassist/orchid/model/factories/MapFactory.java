@@ -4,7 +4,7 @@ import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sets.MapSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 
-public class TermFactory extends OrchidFactory {
+public class MapFactory extends OrchidFactory {
 
     /** The factory is also inherently a term which has a
      * name within the editor.  This is its name.*/
@@ -24,7 +24,7 @@ public class TermFactory extends OrchidFactory {
      * Assumes that inputTerm is an element of a MapSet
      *
      * @param inputTerm*/
-    TermFactory(NamedTerm inputTerm) {
+    MapFactory(NamedTerm inputTerm) {
         factoryName = inputTerm.getName();
         MapSet inputSet = (MapSet) inputTerm.getSet();
         spawn = new AnonymousTerm(inputSet.getMap().getOutput());
