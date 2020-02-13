@@ -48,6 +48,7 @@ public class EditorComplex {
     private final String termDef = "termDef";
     private final String mapDef = "mapDef";
     private final String setDef = "setDef";
+    private final String mapSeq = "map";
     private final String equality = "=";
 
     /**
@@ -58,6 +59,7 @@ public class EditorComplex {
         builtInSeq.add(mapDef);
         builtInSeq.add(setDef);
         builtInSeq.add(equality);
+        builtInSeq.add(mapSeq);
     }};
 
 
@@ -159,6 +161,8 @@ public class EditorComplex {
     /**
      * RETURNS true if once parsed, SEQUENCE
      * corresponds to a map
+     * TODO: This method should only be meant for later EPOCH when I have
+     *  an input parser.  Until then, this is nothing.
      */
     public boolean isMapBuilder(String sequence) {
         sequence = sequence.replaceAll("\\s", "");
@@ -181,6 +185,8 @@ public class EditorComplex {
             return new SetDefinitionFactory(this, lastSocketId, nextSocketId);
         } else if (seq.equals(equality)) {
             return new EqualityFactory(this, lastSocketId, nextSocketId);
+        } else if (seq.equals(mapSeq)) {
+            return new MapFactory(this, lastSocketId, nextSocketId);
         }
         return null;
     }

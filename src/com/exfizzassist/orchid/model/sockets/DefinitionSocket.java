@@ -12,6 +12,7 @@ public class DefinitionSocket extends OrchidSocket {
 
     public DefinitionSocket(EditorComplex _editorComplex, OrchidFactory _parentFactory) {
         super(_editorComplex, _parentFactory);
+        socketType = "definition-socket";
     }
 
     @Override
@@ -41,9 +42,10 @@ public class DefinitionSocket extends OrchidSocket {
         if (!isAllowedSequence(sequence)) {
             return "";
         }
-        NewTermNamePlug newPlug = new NewTermNamePlug(editorComplex, this);
+        NewTermNamePlug newPlug = new NewTermNamePlug(editorComplex, this, sequence);
         setPlug(newPlug);
         newPlug.populateHTML(document);
+        parentFactory.commitNotification();
         return getNextId();
     }
 }

@@ -46,6 +46,11 @@ public abstract class OrchidSocket {
      */
     OrchidPlug plug;
 
+    /**
+     * Name of socket type for use with css
+     */
+    String socketType;
+
     OrchidSocket(EditorComplex _editorComplex, OrchidFactory _parentFactory) {
         parentFactory = _parentFactory;
         editorComplex = _editorComplex;
@@ -83,6 +88,11 @@ public abstract class OrchidSocket {
     /** Getter for prevId*/
     public String getPrevId() {
         return prevId;
+    }
+
+    /**Getter for socket type*/
+    public String getSocketType(){
+        return socketType;
     }
 
     /**

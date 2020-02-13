@@ -20,6 +20,7 @@ public class EqualityFactory extends OrchidFactory {
 
     public EqualityFactory(EditorComplex _editorComplex, String prevSocketId, String nextSocketId) {
         super(_editorComplex);
+        factoryType = "equality-factory";
         leftHandSide = new TermSocket(_editorComplex, this);
         rightHandSide = new TermSocket(_editorComplex, this);
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
@@ -31,11 +32,8 @@ public class EqualityFactory extends OrchidFactory {
 
     @Override
     void populateHTML(Document document) {
-        Element parent = document.getElementById(parentId);
-        Element thisElement = document.createElement("span");
-        thisElement.setAttribute("class", "equality-factory");
-        thisElement.setAttribute("id", getId());
-        parent.appendChild(thisElement);
+        super.populateHTML(document);
+        Element thisElement = document.getElementById(getId());
         leftHandSide.populateHTML(document);
         Element equalsSign = document.createElement("span");
         equalsSign.setAttribute("class", "equals");

@@ -23,6 +23,7 @@ public class TermDefinitionFactory extends OrchidFactory {
 
     public TermDefinitionFactory(EditorComplex _editorComplex, String prevSocketId, String nextSocketId) {
         super(_editorComplex);
+        factoryType = "term-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
         setSocket = new SetSocket(_editorComplex, this);
         definitionSocket.syncWithNext(setSocket);
@@ -34,14 +35,11 @@ public class TermDefinitionFactory extends OrchidFactory {
 
     @Override
     void populateHTML(Document document) {
-        Element parent = document.getElementById(parentId);
-        Element thisElement = document.createElement("span");
-        thisElement.setAttribute("class", "map-definition-factory");
-        thisElement.setAttribute("id", getId());
-        parent.appendChild(thisElement);
+        super.populateHTML(document);
+        Element thisElement = document.getElementById(getId());
         definitionSocket.populateHTML(document);
         Element elementOf = document.createElement("span");
-        elementOf.setAttribute("class", "elementOf");
+        elementOf.setAttribute("class", "element-of");
         elementOf.setTextContent(" ∈ ");
         thisElement.appendChild(elementOf);
         setSocket.populateHTML(document);

@@ -1,38 +1,48 @@
 package com.exfizzassist.orchid.model.factories;
 
-import com.exfizzassist.orchid.model.plugs.OrchidPlug;
-import com.exfizzassist.orchid.model.sets.MapSet;
+import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
+import com.exfizzassist.orchid.model.sockets.TermSocket;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class MapFactory extends OrchidFactory {
 
-    /** The factory is also inherently a term which has a
-     * name within the editor.  This is its name.*/
-    String factoryName;
+    /**
+     * The term that is acting as the map
+     */
+    private TermSocket mapTermSocket;
 
-    /** OrchidTerm outputted by this factory*/
-    OrchidPlug spawn;
+    /**
+     * The argument of the map
+     */
+    private TermSocket argument;
 
-    /** OrchidTerm inputted into this factory*/
-    OrchidSocket socket;
-
-    /** Initializer for the Term Factory.  Takes
-     * the inputTerm as input and creates a factory out
-     * of the map properties of the set of which the term
-     * is an element
-     *
-     * Assumes that inputTerm is an element of a MapSet
-     *
-     * @param inputTerm*/
-    MapFactory(NamedTerm inputTerm) {
-        factoryName = inputTerm.getName();
-        MapSet inputSet = (MapSet) inputTerm.getSet();
-        spawn = new AnonymousTerm(inputSet.getMap().getOutput());
-        socket = inputSet.getMap().generateInputSocket();
+    public MapFactory(EditorComplex _editorComplex, String prevSocketId, String nextSocketId) {
+        super(_editorComplex);
+        factoryType = "map-factory";
+        mapTermSocket = new TermSocket(_editorComplex, this);
+        argument = new TermSocket(_editorComplex, this);
+        OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
+        OrchidSocket nextSocket = _editorComplex.getSocket(nextSocketId);
+        prevSocket.syncWithNext(mapTermSocket);
+        mapTermSocket.syncWithNext(argument);
+        argument.syncWithNext(nextSocket);
     }
 
     @Override
-    int[] socketConfigure(int lastId, int nextId) {
-        return new int[0];
+    void populateHTML(Document document) {
+        super.populateHTML(document);
+        Element thisElement = document.getElementById(getId());
+        mapTermSocket.populateHTML(document);
+        Element leftParenthesis = document.createElement("span");
+        leftParenthesis.setAttribute("class", "left-parenthesis");
+        leftParenthesis.setTextContent("(");
+        Element rightParenthesis = document.createElement("span");
+        rightParenthesis.setAttribute("class", "right-parenthesis");
+        rightParenthesis.setTextContent(")");
+        thisElement.appendChild(leftParenthesis);
+        argument.populateHTML(document);
+        thisElement.appendChild(rightParenthesis);
     }
 }

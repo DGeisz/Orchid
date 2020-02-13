@@ -5,12 +5,12 @@ import com.exfizzassist.orchid.model.factories.OrchidFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.util.ArrayList;
 
 public class LineSocket extends OrchidSocket{
 
     public LineSocket(EditorComplex _editorComplex, OrchidFactory _parentFactory) {
         super(_editorComplex, _parentFactory);
+        socketType = "line-socket";
     }
 
     @Override
@@ -44,7 +44,7 @@ public class LineSocket extends OrchidSocket{
     }
 
     @Override
-    public ArrayList<String> commitSequence(String sequence, Document document, String lastId, String nextId) {
+    public String commitSequence(String sequence, Document document) {
         if (editorComplex.isBuiltIn(sequence)) {
 
         }

@@ -2,6 +2,7 @@ package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 /** This is a data structure that essentially serves to
  * be the parent of one or more sockets.  The actual functionality
@@ -23,6 +24,11 @@ public abstract class OrchidFactory {
      */
     EditorComplex editorComplex;
 
+    /**
+     * Name of factory type for use with css
+     */
+    String factoryType;
+
     public OrchidFactory(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
         id = editorComplex.newId();
@@ -33,7 +39,20 @@ public abstract class OrchidFactory {
      * corresponding to this factory.  All
      * elements are children of parendId
      */
-    abstract void populateHTML(Document document);
+    void populateHTML(Document document) {
+        Element parent = document.getElementById(parentId);
+        Element thisElement = document.createElement("span");
+        if (getFactoryType() != null) {
+            thisElement.setAttribute("class", getFactoryType());
+        }
+        thisElement.setAttribute("id", getId());
+        parent.appendChild(thisElement);
+    }
+
+    /**Get factoryType*/
+    public String getFactoryType(){
+        return factoryType;
+    }
 
     /**Get id*/
     public String getId() {

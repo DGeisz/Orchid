@@ -30,6 +30,7 @@ public class MapDefinitionFactory extends OrchidFactory {
 
     public MapDefinitionFactory(EditorComplex _editorComplex, String prevSocketId, String nextSocketId) {
         super(_editorComplex);
+        factoryType = "map-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
         inputSocket = new SetSocket(_editorComplex, this);
         outputSocket = new SetSocket(_editorComplex, this);
@@ -43,11 +44,8 @@ public class MapDefinitionFactory extends OrchidFactory {
 
     @Override
     void populateHTML(Document document) {
-        Element parent = document.getElementById(parentId);
-        Element thisElement = document.createElement("span");
-        thisElement.setAttribute("class", "map-definition-factory");
-        thisElement.setAttribute("id", getId());
-        parent.appendChild(thisElement);
+        super.populateHTML(document);
+        Element thisElement = document.getElementById(getId());
         definitionSocket.populateHTML(document);
         Element colon = document.createElement("span");
         colon.setAttribute("class", "colon");

@@ -21,6 +21,7 @@ public class SetDefinitionFactory extends OrchidFactory {
 
     public SetDefinitionFactory(EditorComplex _editorComplex, String prevSocketId, String nextSocketId) {
         super(_editorComplex);
+        factoryType = "set-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
         prevSocket.syncWithNext(definitionSocket);
@@ -30,11 +31,8 @@ public class SetDefinitionFactory extends OrchidFactory {
 
     @Override
     void populateHTML(Document document) {
-        Element parent = document.getElementById(parentId);
-        Element thisElement = document.createElement("span");
-        thisElement.setAttribute("class", "map-definition-factory");
-        thisElement.setAttribute("id", getId());
-        parent.appendChild(thisElement);
+        super.populateHTML(document);
+        Element thisElement = document.getElementById(getId());
         definitionSocket.populateHTML(document);
         /*TODO: I super need to figure out how sets will be defined.
         *  Members of sets need properties and rules, and these need to

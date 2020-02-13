@@ -1,0 +1,13 @@
+Ok so I think I was a bit premature in adding the isMapBuilder method
+to EditorComplex. I think maps will be constructed using a built in
+"snippet" with keyword "map."
+
+Before moving on to 2 or 3 from previous log, I'm going to go back
+in and implement that class.
+
+12:00 PM:  I added MapFactory.  I have begun filling in sockets. TermSocket and SetSocket
+are both going to have to call to their parent factories in isAllowedSequence() and commitSequence()
+so I'll need to implement some more methods in the OrchidFactory class that allow sockets
+to check whether a sequence is allowed or can be committed.  Also I think I'll add some
+logic that allows you to commit a term into a termSocket that automatically becomes a mapFactory.
+I think that would be pretty neat.
