@@ -1,7 +1,6 @@
 package com.exfizzassist.orchid.model.sets;
 
-import com.exfizzassist.orchid.model.basic_math.OrchidMap;
-import com.exfizzassist.orchid.model.sockets.OrchidSocket;
+import com.exfizzassist.orchid.model.maps.OrchidMap;
 
 public class MapSet extends OrchidSet {
 

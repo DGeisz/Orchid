@@ -2,6 +2,9 @@ package com.exfizzassist.orchid.model.sockets;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.factories.OrchidFactory;
+import com.exfizzassist.orchid.model.plugs.MathSetPlug;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.plugs.TermPlug;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -39,14 +42,27 @@ public class LineSocket extends OrchidSocket{
     @Override
     public boolean isAllowedSequence(String sequence) {
         return editorComplex.isBuiltIn(sequence) |
-            editorComplex.isDefinedTerm(sequence) |
-            editorComplex.isMapBuilder(sequence);
+            editorComplex.isDefinedTerm(sequence);
+        /*TODO: for the time being, no mapBuilders.  Until later epoch*/
+//            | editorComplex.isMapBuilder(sequence);
     }
 
     @Override
     public String commitSequence(String sequence, Document document) {
-        if (editorComplex.isBuiltIn(sequence)) {
-
+        if (!isAllowedSequence(sequence)) {
+            return getId();
+        } else if (editorComplex.isBuiltIn(sequence)) {
+            OrchidFactory newFactory = editorComplex.factoryBuilder(sequence, getId(), getNextId());
+            setPlug(newFactory.getFactoryOutput());
+            plug.populateHTML(document);
+        } else if (editorComplex.isDefinedTerm(sequence)) {
+            setPlug(new TermPlug(editorComplex, this, sequence));
+            plug.populateHTML(document);
+        } else if (editorComplex.isDefinedSet(sequence)) {
+            setPlug(new MathSetPlug(editorComplex, this, sequence));
+            plug.populateHTML(document);
         }
+        parentFactory.commitNotification();
+        return getNextId();
     }
 }

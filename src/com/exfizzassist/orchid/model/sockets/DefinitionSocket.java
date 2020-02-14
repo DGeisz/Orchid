@@ -40,11 +40,10 @@ public class DefinitionSocket extends OrchidSocket {
     @Override
     public String commitSequence(String sequence, Document document) {
         if (!isAllowedSequence(sequence)) {
-            return "";
+            return getId();
         }
-        NewTermNamePlug newPlug = new NewTermNamePlug(editorComplex, this, sequence);
-        setPlug(newPlug);
-        newPlug.populateHTML(document);
+        setPlug(new NewTermNamePlug(editorComplex, this, sequence));
+        plug.populateHTML(document);
         parentFactory.commitNotification();
         return getNextId();
     }

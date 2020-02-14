@@ -113,12 +113,8 @@ public class EquationEditorController {
      */
     private void handleNewKey(Document doc, KeyEvent event) {
         if (!handled) {
-            currElement = doc.getElementById(currId);
-            currSequence += event.getCharacter();
-            currElement.setTextContent(currSequence);
+            dock.intakeCharacter(event.getCharacter(), doc);
         }
-
-        currElement.setAttribute("class", dock.sequenceStatus(currSequence));
         handled = false;
     }
 
@@ -126,25 +122,20 @@ public class EquationEditorController {
      * Handles special keys like backspace otherwise
      */
     private void handleSpecialKeys(Document doc, KeyEvent event) {
-        currElement = doc.getElementById(currId);
 
         if (event.getCode().equals(KeyCode.BACK_SPACE)) {
             /*TODO: PHASE II: implement deletion from controller side*/
             /*This is basic functionality to delete a char.  Change when
             * you actually implement this*/
-            if (currSequence.length() > 0) {
-                currSequence = currSequence.substring(0, currSequence.length() - 1);
-                currElement.setTextContent(currSequence);
-            }
+//            if (currSequence.length() > 0) {
+//                currSequence = currSequence.substring(0, currSequence.length() - 1);
+//                currElement.setTextContent(currSequence);
+//            }
             /*End of basic implementation.*/
             handled = true;
         } else if (event.getCode().equals(KeyCode.ENTER)) {
-            if (dock.isAllowedSequence(currSequence)) {
-                currId = dock.commitSequence(currSequence, doc);
-                currSequence = "";
-            } else {
-                currElement.setAttribute("class", "undefined");
-            }
+            dock.attemptCommitSequence(doc);
+            handled = true;
         }
     }
 
@@ -176,35 +167,12 @@ public class EquationEditorController {
         editorEngine.getLoadWorker().stateProperty().addListener((observable, oldState, newState) -> {
             if (newState == Worker.State.SUCCEEDED) {
                 Document editorDoc = editorEngine.getDocument();
-                currId = dock.populateEditorHTML(editorDoc);
+                dock.populateEditorHTML(editorDoc);
             }
         });
 
         /*TODO: EPOCH I: PHASE Lambda. Populate the termsHTML as well.  In first round of implementation
         *  I'm focusing specifically on the editor window, so this will be done later*/
     }
-
-
-//    /**
-//     * This is the main method that actually initializes the
-//     * editor.  This syncs the editor complex with the
-//     * equationEditorController and tells this controller
-//     * what the current id is
-//     *
-//     * @param _editorComplex
-//     */
-//    public void initEditorComplex(EditorComplex _editorComplex) {
-//        editorComplex = _editorComplex;
-//        dock = editorComplex.getDock();
-////        editorComplex.newLine();
-////        currId = dock.getCurrentId();
-//        Document doc = editorEngine.getDocument();
-//        Element body = doc.getElementById("editor-body");
-//        Element newHtmlLine = doc.createElement("span");
-//        newHtmlLine.setAttribute("id", Integer.toString(currId));
-//        newHtmlLine.setAttribute("class", "line");
-//    }
-    
-    
 }
 

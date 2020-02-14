@@ -13,7 +13,6 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 
 public class Dock {
 
@@ -34,12 +33,18 @@ public class Dock {
      */
     private String currId;
 
+    /**
+     * Current sequence being developed
+     */
+    private String currSequence;
+
 
     /** Initializes Dock with an editorComplex*/
     Dock(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
         currId = editorComplex.getCurrentPage().getLastId();
-        dockedSocket = editorComplex.getCurrentPage().getCurrentLine().firstUnfilledSocket();
+        dockedSocket = editorComplex.getSocket(currId);
+        currSequence = "";
     }
 
     /**
@@ -53,11 +58,38 @@ public class Dock {
     }
 
     /**
+     * Takes in a character from the EquationEditorController to be
+     * added to the current sequence.  Sets the current sockets inner text
+     * to the current sequence, and sets its color according to sequenceStatus
+     */
+    public void intakeCharacter(String character, Document document) {
+        currSequence += character;
+        Element currSocketElement = document.getElementById(currId);
+        currSocketElement.setTextContent(currSequence);
+        currSocketElement.setAttribute("class", dockedSocket.getSocketType()
+            + " " + dockedSocket.sequenceStatus(currSequence));
+    }
+
+    /**
+     * Attempts to commit the current sequence.  If sequence allowed, the dockedSocket
+     * then commits the sequence.  Otherwise, the font is set to red and nothing
+     * happens.
+     */
+    public void attemptCommitSequence(Document document) {
+        if (dockedSocket.isAllowedSequence(currSequence)) {
+            currId = dockedSocket.commitSequence(currSequence, document);
+        }
+        Element currSocketElement = document.getElementById(currId);
+        currSocketElement.setTextContent(currSequence);
+        currSocketElement.setAttribute("class", dockedSocket.getSocketType() + " red");
+    }
+
+    /**
      * Takes in the skeleton editor DOM and populates it with
      * html.  The html is either new, or it is loaded from a persisted file in
      * some capacity.
      */
-    public String populateEditorHTML(Document editorDoc) {
+    public void populateEditorHTML(Document editorDoc) {
         try {
             printDocument(editorDoc, System.out);
         } catch (IOException | TransformerException e) {
@@ -67,7 +99,6 @@ public class Dock {
         /* Determine if the body has any children, i.e html is already populated.*/
         if (body.getChildNodes().getLength() == 0) {
             editorComplex.getCurrentPage().populateEditorHTML(editorDoc);
-            return currId;
 
             /*TODO: Delete all this after implementing OrchidPage*/
             /* TODO: EPOCH II: Handle persisted information.  For now, treturns 1*/
@@ -84,7 +115,6 @@ public class Dock {
 
         } else {
             /*TODO: EPOCH II: Handle an already populated */
-            return "1";
         }
     }
 

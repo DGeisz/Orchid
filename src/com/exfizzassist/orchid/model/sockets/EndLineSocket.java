@@ -4,7 +4,6 @@ import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.factories.OrchidFactory;
 import org.w3c.dom.Document;
 
-import java.util.ArrayList;
 
 public class EndLineSocket extends OrchidSocket {
     /*TODO: PHASE I: Implement this galatic overlord*/

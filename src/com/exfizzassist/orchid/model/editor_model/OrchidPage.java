@@ -53,7 +53,7 @@ public class OrchidPage {
      * ids from its last line
      */
     String getLastId() {
-        return lineList.get(lineList.size() - 1).getLastId();
+        return lineList.get(lineList.size() - 1).lastId();
     }
 
     /**

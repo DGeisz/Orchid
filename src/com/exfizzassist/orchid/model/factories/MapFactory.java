@@ -45,4 +45,11 @@ public class MapFactory extends OrchidFactory {
         argument.populateHTML(document);
         thisElement.appendChild(rightParenthesis);
     }
+
+    /**
+     * Getter for mapTermSocket
+     */
+    public TermSocket getMapTermSocket() {
+        return mapTermSocket;
+    }
 }

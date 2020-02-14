@@ -49,12 +49,16 @@ public abstract class OrchidFactory {
         parent.appendChild(thisElement);
     }
 
-    /**Get factoryType*/
-    public String getFactoryType(){
+    /**
+     * Get factoryType
+     */
+    public String getFactoryType() {
         return factoryType;
     }
 
-    /**Get id*/
+    /**
+     * Get id
+     */
     public String getId() {
         return id;
     }
@@ -64,6 +68,13 @@ public abstract class OrchidFactory {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    /**
+     * Set parentId
+     */
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
 }

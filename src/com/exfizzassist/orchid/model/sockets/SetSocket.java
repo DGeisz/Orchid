@@ -40,7 +40,7 @@ public class SetSocket extends OrchidSocket {
     @Override
     public String commitSequence(String sequence, Document document) {
         if (!isAllowedSequence(sequence)) {
-            return "";
+            return getId();
         }
         MathSetPlug mathSetPlug = new MathSetPlug(editorComplex, this, sequence);
         setPlug(mathSetPlug);
@@ -48,21 +48,4 @@ public class SetSocket extends OrchidSocket {
         parentFactory.commitNotification();
         return getNextId();
     }
-
-
-
-
-
-
-
-
-
-    /*FIXME: Not sure why this is here, but I guess keep it around for if this
-    *  is useful*/
-    /** Higher Order set type.  Optional
-     * If null, the higher order set type is assumed to
-     * be the set of all sets, so any set can plug into
-     * this socket.
-     */
-    HigherOrderSet parentSet;
 }

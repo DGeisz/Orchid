@@ -55,29 +55,15 @@ public class LineFactory extends OrchidFactory{
         contentSocket = new LineSocket(editorComplex, this);
         endLineSocket = new EndLineSocket(editorComplex, this);
         contentSocket.setPrevId("");
-        contentSocket.setNextId(endLineSocket.getId());
-        endLineSocket.setPrevId(contentSocket.getId());
+        contentSocket.syncWithNext(endLineSocket);
         endLineSocket.setNextId("");
     }
 
     /**
      * @return the id of the endLineSocket
      */
-    /*TODO change to last socket id*/
     public String lastId() {
         return endLineSocket.getId();
-    }
-
-    /**
-     * @return the last Ids of the line
-     */
-    public ArrayList<String> getLastIds() {
-        ArrayList<String> ids = new ArrayList<>();
-        ids.add(endLineSocket.getId());
-        OrchidSocket lastSocket = editorComplex.getSocketRegistry().get(endLineSocket.getPrevId());
-        ids.add(0, lastSocket.getId());
-        ids.add(0, lastSocket.getPrevId());
-        return ids;
     }
 
     /**

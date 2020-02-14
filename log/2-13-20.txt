@@ -11,3 +11,22 @@ so I'll need to implement some more methods in the OrchidFactory class that allo
 to check whether a sequence is allowed or can be committed.  Also I think I'll add some
 logic that allows you to commit a term into a termSocket that automatically becomes a mapFactory.
 I think that would be pretty neat.
+
+3:31 PM:  Ok one thing, when setPlug is called, the plug is given a reference
+to the socket.  Make sure you use that reference to set the parentId of the plug
+to the socket in question.  Also make sure that when a call is made to getFactoryOutput,
+the parent of the factory is set to the plug.  Otherwise, everything is going to
+the dogs.
+
+3:45 PM: Ok I think I'm in a pretty good place.  I think I'm going to briefly go back
+to 3 from the last log before I proceed to de-red the sockets.  That's going to be a bit of a lengthy process.
+
+4:08 PM: Good sauce my dude.  Finished 3 from the previous log, and it was kinda a piece of cake.
+Next to do list:
+
+1. De-red the sockets.
+2. Implement new methods in Factories.
+3. Implement methods in Plugs.
+
+At this point, you'll probably need to define term classes.  After 3 would be a pretty
+great time to do so.

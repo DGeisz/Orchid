@@ -1,11 +1,5 @@
 package com.exfizzassist.orchid.model.sets;
 
-import com.exfizzassist.orchid.model.basic_math.OrchidMap;
-import com.exfizzassist.orchid.model.sockets.OrchidSocket;
-import com.exfizzassist.orchid.model.sockets.TermSocket;
-
-import java.util.ArrayList;
-
 public abstract class OrchidSet {
     /** Identifier of the set.*/
     String identifier;
