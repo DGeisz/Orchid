@@ -1,0 +1,35 @@
+Ok so the newest thing that's bouncing around the ol nogerino is the fact
+that there probably should be set sockets.  Anything non-syntactical on
+the editor page should be a term, including sets. So everything should be
+an OrchidTerm.  Like everything.  Then you can start to get the rich juice of
+category theory in the software.  So, before moving forward, first things first.
+
+1.  Get rid of SetSockets.  There shalt only be TermSockets.
+2.  Get rid of MathSetPlug.  There shalt only be TermPlugs.
+3.  Probably a couple factories will be yelling at you.  Fix those factories.
+
+Ok, got that done.  Now, I'm back onto de-redding the sockets.  So now, I'm
+doing the steps in log 2-13-20.
+
+With the whole "sets are terms" philosophy, I'm starting to see issues with
+cartesian products and ordered pairs.  Because of that, I'm going to push the implementation
+of such structures until after PHASE I.  When you finish PHASE I, figure out if
+you should do cartesians first or the Deletion Phase first.
+
+2:51: Time to implement new methods in the factories.
+
+3:10: Realized I have no way to actually represent rules yet.  Great.  Hadn't thought about
+that for some reason.  Honestly, I think it should be fairly easy to implement.  I just have
+to include relationships between OrchidTerms, and OrchidMaps.  I also have to come up with a way
+to quickly access said relationships.  In a later EPOCH perhaps, I need to implement trie structures.
+Those are clearly the only way.
+
+3:50: I'm fading.  I think I'm gone bop on home in a bit.  Some quick things.  Term socket needs to have
+some notion of the type of set its plugs are going to be elements of.  The map factory needs some
+way to determine whether it's output is consistent with the TermSocket's expected set type. In terms of what
+I've done, I finished throwing stuff into Equality factory and MapDefinitionFactory.
+
+Wait, that's not true.  I need to implement sequenceStateInContext for MapDefinition Factory.  Actually that should
+be easy.  I just have to make sure both terms are sets.  One moment.
+
+Ok finished that up.  That was a piece of frikin cake.  Funny how the factories seem like they're always red.  

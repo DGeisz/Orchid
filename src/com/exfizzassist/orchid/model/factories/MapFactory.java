@@ -1,6 +1,7 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
 import org.w3c.dom.Document;
@@ -44,6 +45,32 @@ public class MapFactory extends OrchidFactory {
         thisElement.appendChild(leftParenthesis);
         argument.populateHTML(document);
         thisElement.appendChild(rightParenthesis);
+    }
+
+    @Override
+    public void commitNotification() {
+
+    }
+
+    @Override
+    public OrchidPlug getFactoryOutput() {
+        return null;
+    }
+
+    @Override
+    public SequenceState sequenceStateInContext(String sequence, String socketId) {
+        if (!editorComplex.isDefinedTerm(sequence)) {
+            return SequenceState.NOT_PERMITTED;
+        }
+        OrchidTerm thisTerm = editorComplex.getTermRegistry().get(sequence);
+        if (socketId.equals(mapTermSocket.getId())) {
+            if (!thisTerm.getSet().isMapSet()) {
+                return SequenceState.NOT_PERMITTED;
+            }
+            if (argument.plugged()) {
+
+            }
+        }
     }
 
     /**

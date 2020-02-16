@@ -14,7 +14,7 @@ public class EditorComplex {
      * Registry of all defined terms in the current session
      * and the sets to which they correspond
      */
-    private HashMap<String, OrchidSet> termRegistry;
+    private HashMap<String, OrchidTerm> termRegistry;
 
     /**
      * Registry of all sockets, where each socket is accessed

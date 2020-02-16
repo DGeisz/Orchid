@@ -1,6 +1,7 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -29,6 +30,11 @@ public abstract class OrchidFactory {
      */
     String factoryType;
 
+    /**
+     * Output of the factory
+     */
+    OrchidPlug output;
+
     public OrchidFactory(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
         id = editorComplex.newId();
@@ -48,6 +54,31 @@ public abstract class OrchidFactory {
         thisElement.setAttribute("id", getId());
         parent.appendChild(thisElement);
     }
+
+    /**
+     * Is called to notify a factory that one of its sockets
+     * has just had something committed into it.  This gives the
+     * factory the chance to see if all sockets are filled, and if so
+     * to do whatever the fracking factory is supposed to do.
+     */
+    abstract public void commitNotification();
+
+
+    /**
+     * Gets the output of the factory.  All factories output
+     * a plug of some sort, so this method first generates the
+     * output plug if it doesn't yet exist, and then returns the plug
+     */
+    abstract public OrchidPlug getFactoryOutput();
+
+    /**
+     * Is called by sockets that can't on their own determine
+     * the permissibility of an uncommitted sequence. The socketID
+     * is included so the factory can determine who called it. Returns
+     * the corresponding SEQUENCE_STATE value.
+     */
+    abstract public SequenceState sequenceStateInContext(String sequence, String socketId);
+
 
     /**
      * Get factoryType

@@ -2,6 +2,7 @@ package com.exfizzassist.orchid.model.factories;
 
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sockets.EndLineSocket;
 import com.exfizzassist.orchid.model.sockets.LineSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
@@ -78,6 +79,22 @@ public class LineFactory extends OrchidFactory{
         pageElement.appendChild(lineHtml);
         contentSocket.populateHTML(document);
         endLineSocket.populateHTML(document);
+    }
+
+    @Override
+    public void commitNotification() {}
+
+    /**
+     * Line factories are the only factories that don't return plugs.
+     */
+    @Override
+    public OrchidPlug getFactoryOutput() {
+        return null;
+    }
+
+    @Override
+    public SequenceState sequenceStateInContext(String sequence, String socketId) {
+        return SequenceState.INAPPLICABLE;
     }
 
     /**

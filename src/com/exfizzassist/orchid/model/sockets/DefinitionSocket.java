@@ -42,7 +42,7 @@ public class DefinitionSocket extends OrchidSocket {
         if (!isAllowedSequence(sequence)) {
             return getId();
         }
-        setPlug(new NewTermNamePlug(editorComplex, this, sequence));
+        setPlug(new NewTermNamePlug(editorComplex, sequence));
         plug.populateHTML(document);
         parentFactory.commitNotification();
         return getNextId();

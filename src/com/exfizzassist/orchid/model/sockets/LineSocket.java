@@ -2,8 +2,6 @@ package com.exfizzassist.orchid.model.sockets;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.factories.OrchidFactory;
-import com.exfizzassist.orchid.model.plugs.MathSetPlug;
-import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.plugs.TermPlug;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -56,10 +54,7 @@ public class LineSocket extends OrchidSocket{
             setPlug(newFactory.getFactoryOutput());
             plug.populateHTML(document);
         } else if (editorComplex.isDefinedTerm(sequence)) {
-            setPlug(new TermPlug(editorComplex, this, sequence));
-            plug.populateHTML(document);
-        } else if (editorComplex.isDefinedSet(sequence)) {
-            setPlug(new MathSetPlug(editorComplex, this, sequence));
+            setPlug(new TermPlug(editorComplex, sequence));
             plug.populateHTML(document);
         }
         parentFactory.commitNotification();

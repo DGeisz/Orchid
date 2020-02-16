@@ -1,6 +1,8 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
 import org.w3c.dom.Document;
@@ -17,6 +19,7 @@ public class EqualityFactory extends OrchidFactory {
      * The term on the right hand side
      */
     private TermSocket rightHandSide;
+
 
     public EqualityFactory(EditorComplex _editorComplex, String prevSocketId, String nextSocketId) {
         super(_editorComplex);
@@ -42,5 +45,57 @@ public class EqualityFactory extends OrchidFactory {
         *  to equals sign.*/
         thisElement.appendChild(equalsSign);
         rightHandSide.populateHTML(document);
+    }
+
+    @Override
+    public void commitNotification() {
+        /*TODO: IMPLEMENT this whenever you figure out how to store equalities/rules.*/
+    }
+
+    @Override
+    public OrchidPlug getFactoryOutput() {
+        if (output == null) {
+            output = new ModelPlug(editorComplex);
+            output.setFactory(this);
+            parentId = output.getId();
+        }
+        return output;
+    }
+
+    @Override
+    public SequenceState sequenceStateInContext(String sequence, String socketId) {
+        if (socketId.equals(leftHandSide.getId())) {
+            if (rightHandSide.plugged()) {
+                OrchidSet otherTermSet = rightHandSide.getPlug().getTerm().getOrchidSet();
+                if (editorComplex.isDefinedTerm(sequence)) {
+                    OrchidTerm sequenceTerm = editorComplex.getTermRegistry().get(sequence);
+                    if (sequenceTerm.getOrchidSet().compatibleWith(otherTermSet)) {
+                        return SequenceState.TERM;
+                    } else if (sequenceTerm.isMap()) {
+                        if (sequenceTerm.getMap().getTarget().compatibleWith(otherTermSet)) {
+                            return SequenceState.MAP;
+                        }
+                    }
+                    return SequenceState.NOT_PERMITTED;
+                }
+            }
+            return SequenceState.TERM;
+        }
+        if (leftHandSide.plugged()) {
+            OrchidSet otherTermSet = leftHandSide.getPlug().getTerm().getOrchidSet();
+            if (editorComplex.isDefinedTerm(sequence)) {
+                OrchidTerm sequenceTerm = editorComplex.getTermRegistry().get(sequence);
+                if (sequenceTerm.getOrchidSet().compatibleWith(otherTermSet)) {
+                    return SequenceState.TERM;
+                } else if (sequenceTerm.isMap()) {
+                    if (sequenceTerm.getMap().getTarget().compatibleWith(otherTermSet)) {
+                        return SequenceState.MAP;
+                    }
+                }
+                return SequenceState.NOT_PERMITTED;
+            }
+        }
+        return SequenceState.TERM;
+
     }
 }
