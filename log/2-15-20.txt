@@ -32,4 +32,4 @@ I've done, I finished throwing stuff into Equality factory and MapDefinitionFact
 Wait, that's not true.  I need to implement sequenceStateInContext for MapDefinition Factory.  Actually that should
 be easy.  I just have to make sure both terms are sets.  One moment.
 
-Ok finished that up.  That was a piece of frikin cake.  Funny how the factories seem like they're always red.  
+Ok finished that up.  That was a piece of frikin cake.  Funny how the factories seem like they're always red.

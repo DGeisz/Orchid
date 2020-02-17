@@ -1,0 +1,14 @@
+10:33: First things first, I'm prioritizing sleep nowadays, so I'm going to go to bed soon. Let's outline
+what has to happen here.
+
+1. I just created the universal set.  This will be the default elementOf of all term sockets.
+2. I need to add elementOf to the termSocket, and add the default behavior and getters and setters.
+3. Continue my grand crusade of filling in the factories, but this time with proper behavior.
+
+
+Just realized that if termSocket knows what kind of element to expect, then we don't
+need the factories to have sequenceStateInContext.  Or do we.  Let me think.  Ok we don't
+need sequenceStateInContext, but I need to be able to have some notion of a generic set of
+all maps from an arbitrary domain to a particular set.  That's a definable object I think.
+Then the parent factory can set the term socket's elementOf when a call to commitNotification
+is made.  I'm go to bed.

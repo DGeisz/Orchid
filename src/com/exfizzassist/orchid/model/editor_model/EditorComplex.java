@@ -2,6 +2,7 @@ package com.exfizzassist.orchid.model.editor_model;
 
 import com.exfizzassist.orchid.model.factories.*;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
+import com.exfizzassist.orchid.model.sets.UniversalSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.view.EquationEditorController;
 
@@ -62,6 +63,11 @@ public class EditorComplex {
         builtInSeq.add(mapSeq);
     }};
 
+    /**
+     * The universal set for this editor
+     */
+    private final UniversalSet universalSet = new UniversalSet();
+
 
 
     /**
@@ -81,7 +87,7 @@ public class EditorComplex {
     /**
      * @return termRegistry
      */
-    public HashMap<String, OrchidSet> getTermRegistry() {
+    public HashMap<String, OrchidTerm> getTermRegistry() {
 
         return termRegistry;
     }
@@ -191,4 +197,7 @@ public class EditorComplex {
         return null;
     }
 
+    public UniversalSet getUniversalSet() {
+        return universalSet;
+    }
 }
