@@ -49,7 +49,18 @@ public class EqualityFactory extends OrchidFactory {
 
     @Override
     public void commitNotification() {
-        /*TODO: IMPLEMENT this whenever you figure out how to store equalities/rules.*/
+        boolean leftSocketPlugged = leftHandSide.plugged();
+        boolean rightSocketPlugged = rightHandSide.plugged();
+        if (!leftSocketPlugged && !rightSocketPlugged) {
+            return;
+        }
+        if (!leftSocketPlugged) {
+            leftHandSide.setElementOf(rightHandSide.getElementOf());
+        } else if (!rightSocketPlugged) {
+            rightHandSide.setElementOf(leftHandSide.getElementOf());
+        } else {
+            /*TODO: IMPLEMENT this whenever you figure out how to store equalities/rules.*/
+        }
     }
 
     @Override
@@ -60,42 +71,5 @@ public class EqualityFactory extends OrchidFactory {
             parentId = output.getId();
         }
         return output;
-    }
-
-    @Override
-    public SequenceState sequenceStateInContext(String sequence, String socketId) {
-        if (socketId.equals(leftHandSide.getId())) {
-            if (rightHandSide.plugged()) {
-                OrchidSet otherTermSet = rightHandSide.getPlug().getTerm().getOrchidSet();
-                if (editorComplex.isDefinedTerm(sequence)) {
-                    OrchidTerm sequenceTerm = editorComplex.getTermRegistry().get(sequence);
-                    if (sequenceTerm.getOrchidSet().compatibleWith(otherTermSet)) {
-                        return SequenceState.TERM;
-                    } else if (sequenceTerm.isMap()) {
-                        if (sequenceTerm.getMap().getTarget().compatibleWith(otherTermSet)) {
-                            return SequenceState.MAP;
-                        }
-                    }
-                    return SequenceState.NOT_PERMITTED;
-                }
-            }
-            return SequenceState.TERM;
-        }
-        if (leftHandSide.plugged()) {
-            OrchidSet otherTermSet = leftHandSide.getPlug().getTerm().getOrchidSet();
-            if (editorComplex.isDefinedTerm(sequence)) {
-                OrchidTerm sequenceTerm = editorComplex.getTermRegistry().get(sequence);
-                if (sequenceTerm.getOrchidSet().compatibleWith(otherTermSet)) {
-                    return SequenceState.TERM;
-                } else if (sequenceTerm.isMap()) {
-                    if (sequenceTerm.getMap().getTarget().compatibleWith(otherTermSet)) {
-                        return SequenceState.MAP;
-                    }
-                }
-                return SequenceState.NOT_PERMITTED;
-            }
-        }
-        return SequenceState.TERM;
-
     }
 }

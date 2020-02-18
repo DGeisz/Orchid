@@ -20,8 +20,4 @@ public class CartesianFactory extends OrchidFactory {
         return null;
     }
 
-    @Override
-    public SequenceState sequenceStateInContext(String sequence, String socketId) {
-        return null;
-    }
 }

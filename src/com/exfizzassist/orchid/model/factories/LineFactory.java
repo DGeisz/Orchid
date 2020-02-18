@@ -92,10 +92,6 @@ public class LineFactory extends OrchidFactory{
         return null;
     }
 
-    @Override
-    public SequenceState sequenceStateInContext(String sequence, String socketId) {
-        return SequenceState.INAPPLICABLE;
-    }
 
     /**
      * @returns either content socket or the first non-empty

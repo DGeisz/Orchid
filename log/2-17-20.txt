@@ -1,0 +1,47 @@
+4:41:  Just finished changing the commitSequence method of TermSocket to match
+the new and improved elementOf architecture.  Now then, here is the current agenda.
+
+1. De-red TermSocket. (This will require editing EditorComplex and adding OrchidTerm with
+basic functionality).
+
+2. Continue the glorious factory crusades.
+
+3. Work on implementing the Plugs or OrchidTerm, whichever comes first.
+
+Also I'm doing this thing where I'm trying not to use my memory as much as possible,
+so I'm basically flowing like a frikin slip n slide.
+
+I also need to clear the SequenceStateInContext out of the factories.
+
+Ok I finished 1. Now I'm going to get rid of sequence state in context.
+
+Now I'm implementing commitNotification in EqualityFactory.  Basically
+this is just going to set whichever socket is empty's elementOf to the
+other socket's elementOf.  If both sockets are filled, then it will
+store a rule. I like super haven't implemented the model for rules,
+so for now I'm going to leave that blank.
+
+Ok, finished commitNot in EqFact.  Again TODO: figure out how to store rules.
+
+I also just added the MajorGoals text file, which will basically hold major
+landmarks in progress.
+
+Now I'm adding implementation for comNot in MapDefFact.  Things to do with
+this one.  Wait this is already finished.
+
+Just finished MapFactory, so now I'm on to SetDefFact.  Right now it only has
+a definition factory, so I just have to fill in commNot, and if the socket is
+filled, create a new OrchidTerm that is an element of the set of all sets
+
+6:05: Ok just finished SetDefinitionFactory.  Next up is termDefFact
+
+6:16: There are issues associated with comNot in TermDefinitionFactory.
+The fact of the matter is that I've associated sets with Terms, but I still
+have a bunch of classes for sets, which are quite useful (Cause this is category theory of sets)
+So I think I'm going to give HigherOrderSets the ability to produce new sets.
+
+
+6:34: I need to make dinner and study for 61C, but I'm going to need some way
+to determine if a newly defined term is a set, and then make and store an
+OrchidSet corresponding to that term.  This is so important I'm going to make
+it a TODO: figure out the set term duality.

@@ -33,8 +33,8 @@ public class DefinitionSocket extends OrchidSocket {
     @Override
     public boolean isAllowedSequence(String sequence) {
         return !editorComplex.isBuiltIn(sequence)
-            && !editorComplex.isDefinedTerm(sequence)
-            && !editorComplex.isMapBuilder(sequence);
+            && !editorComplex.isDefinedTerm(sequence);
+//            && !editorComplex.isMapBuilder(sequence);
     }
 
     @Override

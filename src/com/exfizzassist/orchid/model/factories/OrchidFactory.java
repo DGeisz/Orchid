@@ -72,15 +72,6 @@ public abstract class OrchidFactory {
     abstract public OrchidPlug getFactoryOutput();
 
     /**
-     * Is called by sockets that can't on their own determine
-     * the permissibility of an uncommitted sequence. The socketID
-     * is included so the factory can determine who called it. Returns
-     * the corresponding SEQUENCE_STATE value.
-     */
-    abstract public SequenceState sequenceStateInContext(String sequence, String socketId);
-
-
-    /**
      * Get factoryType
      */
     public String getFactoryType() {

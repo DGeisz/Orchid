@@ -1,6 +1,9 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.AnonymousTermPlug;
+import com.exfizzassist.orchid.model.plugs.NewTermNamePlug;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
@@ -23,7 +26,7 @@ public class TermDefinitionFactory extends OrchidFactory {
         super(_editorComplex);
         factoryType = "term-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
-        setSocket = new TermSocket(_editorComplex, this);
+        setSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSet());
         definitionSocket.syncWithNext(setSocket);
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
         prevSocket.syncWithNext(definitionSocket);
@@ -41,5 +44,26 @@ public class TermDefinitionFactory extends OrchidFactory {
         elementOf.setTextContent(" ∈ ");
         thisElement.appendChild(elementOf);
         setSocket.populateHTML(document);
+    }
+
+    @Override
+    public void commitNotification() {
+        if (definitionSocket.plugged() && setSocket.plugged()) {
+            /*TODO: Check if the model in setSocket corresponds to a defined
+            *  rule, and if it does, make the term an element of that defined set.
+            *  Otherwise, make the new term a member of a generic set whose parent is
+            *  an element of the parent of the plug of setSocket*/
+            String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
+        }
+    }
+
+    @Override
+    public OrchidPlug getFactoryOutput() {
+        if (output == null) {
+            output = new ModelPlug(editorComplex);
+            output.setFactory(this);
+            parentId = output.getId();
+        }
+        return output;
     }
 }

@@ -7,6 +7,7 @@ import com.exfizzassist.orchid.model.sets.MapSet;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
+import com.exfizzassist.orchid.model.terms.NamedTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -32,8 +33,9 @@ public class MapDefinitionFactory extends OrchidFactory {
         super(_editorComplex);
         factoryType = "map-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
-        sourceSocket = new TermSocket(_editorComplex, this);
-        targetSocket = new TermSocket(_editorComplex, this);
+        sourceSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSets());
+        targetSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSets());
+        targetSocket.setElementOf(editorComplex.getSetOfSets());
         definitionSocket.syncWithNext(sourceSocket);
         sourceSocket.syncWithNext(targetSocket);
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
@@ -63,8 +65,8 @@ public class MapDefinitionFactory extends OrchidFactory {
     public void commitNotification() {
         if (definitionSocket.plugged() && sourceSocket.plugged() && targetSocket.plugged()) {
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
-            MapSet parentSet = editorComplex.getGenericMapSet(sourceSocket.getPlug().getTerm().getOrchidSet(), targetSocket.getPlug().getTerm().getOrchidSet());
-            OrchidTerm newTerm = new OrchidTerm(termName, parentSet);
+            MapSet parentSet = editorComplex.getGenericMapSet(sourceSocket.getPlug().getTerm().getParentSet(), targetSocket.getPlug().getTerm().getParentSet());
+            NamedTerm newTerm = new NamedTerm(termName, parentSet);
             editorComplex.addTerm(newTerm);
         }
     }
@@ -77,21 +79,5 @@ public class MapDefinitionFactory extends OrchidFactory {
             parentId = output.getId();
         }
         return output;
-    }
-
-    @Override
-    public SequenceState sequenceStateInContext(String sequence, String socketId) {
-        if (socketId.equals(definitionSocket.getId())) {
-            return SequenceState.INAPPLICABLE;
-        } else if (socketId.equals(sourceSocket.getId()) || socketId.equals(targetSocket.getId())) {
-            if (!editorComplex.isDefinedTerm(sequence)) {
-                return SequenceState.NOT_PERMITTED;
-            }
-            OrchidTerm thisTerm = editorComplex.getTermRegistry().get(sequence);
-            if (thisTerm.getOrchidSet().isHigherOrderSet()) {
-                return SequenceState.TERM;
-            }
-            return SequenceState.NOT_PERMITTED;
-        }
     }
 }

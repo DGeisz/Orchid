@@ -4,6 +4,7 @@ import com.exfizzassist.orchid.model.factories.*;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sets.UniversalSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
+import com.exfizzassist.orchid.model.terms.OrchidTerm;
 import com.exfizzassist.orchid.view.EquationEditorController;
 
 import java.util.ArrayList;
@@ -170,14 +171,14 @@ public class EditorComplex {
      * TODO: This method should only be meant for later EPOCH when I have
      *  an input parser.  Until then, this is nothing.
      */
-    public boolean isMapBuilder(String sequence) {
-        sequence = sequence.replaceAll("\\s", "");
-        if (sequence.length() >= 3 && sequence.substring(sequence.length() - 2).equals("()")) {
-            sequence = sequence.substring(0, sequence.length() - 2);
-            return isDefinedTerm(sequence) && termRegistry.get(sequence).isMapSet();
-        }
-        return false;
-    }
+//    public boolean isMapBuilder(String sequence) {
+//        sequence = sequence.replaceAll("\\s", "");
+//        if (sequence.length() >= 3 && sequence.substring(sequence.length() - 2).equals("()")) {
+//            sequence = sequence.substring(0, sequence.length() - 2);
+//            return isDefinedTerm(sequence) && termRegistry.get(sequence).isMapSet();
+//        }
+//        return false;
+//    }
 
     /**
      * RETURNS a new OrchidFactory corresponding to SEQ
@@ -192,12 +193,23 @@ public class EditorComplex {
         } else if (seq.equals(equality)) {
             return new EqualityFactory(this, lastSocketId, nextSocketId);
         } else if (seq.equals(mapSeq)) {
-            return new MapFactory(this, lastSocketId, nextSocketId);
+            return new MapFactory(this, lastSocketId, nextSocketId, universalSet);
         }
         return null;
     }
 
     public UniversalSet getUniversalSet() {
         return universalSet;
+    }
+
+    /**
+     * Returns the term corresponding to SEQUENCE unless sequence
+     * doesn't correspond to a term.  Then it returns null
+     */
+    public OrchidTerm getTerm(String sequence) {
+        if (termRegistry.containsKey(sequence)) {
+            return termRegistry.get(sequence);
+        }
+        return null;
     }
 }

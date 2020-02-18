@@ -5,23 +5,23 @@ import com.exfizzassist.orchid.model.sets.OrchidSet;
 
 public class OrchidMap {
 
-    /** Input Set*/
-    private OrchidSet input;
+    /** Source Set (source)*/
+    private OrchidSet source;
 
-    /** Output set*/
-    private OrchidSet output;
+    /** Target set (target)*/
+    private OrchidSet target;
 
-    OrchidMap(OrchidSet input, OrchidSet output) {
-        this.input = input;
-        this.output = output;
+    OrchidMap(OrchidSet source, OrchidSet target) {
+        this.source = source;
+        this.target = target;
     }
 
-    public OrchidSet getInput() {
-        return input;
+    public OrchidSet getSource() {
+        return source;
     }
 
-    public OrchidSet getOutput() {
-        return output;
+    public OrchidSet getTarget() {
+        return target;
     }
 
 }

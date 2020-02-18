@@ -1,8 +1,11 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.NewTermNamePlug;
+import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
+import com.exfizzassist.orchid.model.terms.NamedTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -41,5 +44,24 @@ public class SetDefinitionFactory extends OrchidFactory {
         setDefinitionSyntax.setAttribute("class", "set-definition");
         setDefinitionSyntax.setTextContent(" = {}");
         thisElement.appendChild(setDefinitionSyntax);
+    }
+
+    @Override
+    public void commitNotification() {
+        if (definitionSocket.plugged()) {
+            String setName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
+            NamedTerm newTerm = new NamedTerm(setName, editorComplex.getSetOfSets());
+            editorComplex.addTerm(newTerm);
+        }
+    }
+
+    @Override
+    public OrchidPlug getFactoryOutput() {
+        if (output == null) {
+            output = new ModelPlug(editorComplex);
+            output.setFactory(this);
+            parentId = output.getId();
+        }
+        return output;
     }
 }

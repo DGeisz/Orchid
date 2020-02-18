@@ -29,8 +29,8 @@ public class LineSocket extends OrchidSocket{
     @Override
     public String sequenceStatus(String sequence) {
         if (editorComplex.isBuiltIn(sequence) |
-            editorComplex.isDefinedTerm(sequence) |
-            editorComplex.isMapBuilder(sequence)
+            editorComplex.isDefinedTerm(sequence)
+//            | editorComplex.isMapBuilder(sequence)
         ) {
             return "green";
         }
