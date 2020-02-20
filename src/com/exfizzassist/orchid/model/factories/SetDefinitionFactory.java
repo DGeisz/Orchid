@@ -9,6 +9,7 @@ import com.exfizzassist.orchid.model.sets.SimpleSet;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.terms.NamedTerm;
+import com.exfizzassist.orchid.model.terms.SetTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -55,12 +56,11 @@ public class SetDefinitionFactory extends OrchidFactory {
         *  this is for a later epoch.*/
         if (definitionSocket.plugged()) {
             String setName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
-            NamedTerm newTerm = new NamedTerm(setName, editorComplex.getSetOfSets());
-            editorComplex.addTerm(setName, newTerm);
             /*TODO: Change this to something more meaningful*/
             OrchidSet newSet = new SimpleSet(setName);
-            editorComplex.addSet(newTerm, newSet);
-            /**/
+            editorComplex.addSet(newSet);
+            SetTerm newTerm = new SetTerm(setName, newSet, editorComplex.getSetOfAllSets());
+            editorComplex.addTerm(setName, newTerm);
         }
     }
 

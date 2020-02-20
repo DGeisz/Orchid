@@ -11,6 +11,7 @@ import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
 import com.exfizzassist.orchid.model.terms.NamedTerm;
+import com.exfizzassist.orchid.model.terms.SetTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -59,11 +60,14 @@ public class TermDefinitionFactory extends OrchidFactory {
             *  an element of the parent of the plug of setSocket*/
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
             OrchidSet parentSet = setSocket.getPlug().getParentSet();
-            NamedTerm newTerm = new NamedTerm(termName, parentSet);
-            editorComplex.addTerm(termName, newTerm);
             if (parentSet.isSubsetOf(editorComplex.getSetOfAllSets())) {
-                OrchidSet newSet = (HigherOrderSet) parentSet.newChildSet();
-                editorComplex.addSet(newTerm, newSet);
+                OrchidSet newSet = ((HigherOrderSet) parentSet).newChildSet(termName);
+                editorComplex.addSet(newSet);
+                SetTerm newSetTerm = new SetTerm(termName, newSet, parentSet);
+                editorComplex.addTerm(termName, newSetTerm);
+            } else {
+                NamedTerm newTerm = new NamedTerm(termName, parentSet);
+                editorComplex.addTerm(termName, newTerm);
             }
         }
     }

@@ -28,7 +28,7 @@ public class EditorComplex {
     /**
      * Registry of all defined sets
      */
-    private HashMap<OrchidTerm, OrchidSet> setRegistry;
+    private ArrayList<OrchidSet> setRegistry;
 
     /**
      * List of all pages contained within the editor
@@ -86,7 +86,7 @@ public class EditorComplex {
         dock = new Dock(this);
         termRegistry = new HashMap<>();
         socketRegistry = new HashMap<>();
-        setRegistry = new HashMap<>();
+        setRegistry = new ArrayList<>();
         pageList = new ArrayList<>();
         currPage = new OrchidPage(this);
         pageList.add(currPage);
@@ -237,7 +237,7 @@ public class EditorComplex {
     /**
      * Adds term/set combination to the set registry
      */
-    public void addSet(OrchidTerm term, OrchidSet set) {
-        setRegistry.put(term, set);
+    public void addSet(OrchidSet set) {
+        setRegistry.add(set);
     }
 }

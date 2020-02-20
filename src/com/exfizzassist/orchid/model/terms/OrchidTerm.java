@@ -20,4 +20,11 @@ public abstract class OrchidTerm {
     public OrchidSet getParentSet() {
         return parentSet;
     }
+
+    /**
+     * Determine if term corresponds to a set
+     */
+    public boolean isSet() {
+        return false;
+    }
 }
