@@ -1,6 +1,7 @@
 package com.exfizzassist.orchid.model.editor_model;
 
 import com.exfizzassist.orchid.model.factories.*;
+import com.exfizzassist.orchid.model.sets.HigherOrderSet;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sets.UniversalSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
@@ -27,7 +28,7 @@ public class EditorComplex {
     /**
      * Registry of all defined sets
      */
-    private ArrayList<OrchidSet> setRegistry;
+    private HashMap<OrchidTerm, OrchidSet> setRegistry;
 
     /**
      * List of all pages contained within the editor
@@ -69,6 +70,11 @@ public class EditorComplex {
      */
     private final UniversalSet universalSet = new UniversalSet();
 
+    /**
+     * Set of all sets
+     */
+    private final HigherOrderSet setOfAllSets = new HigherOrderSet();
+
 
 
     /**
@@ -80,9 +86,11 @@ public class EditorComplex {
         dock = new Dock(this);
         termRegistry = new HashMap<>();
         socketRegistry = new HashMap<>();
+        setRegistry = new HashMap<>();
         pageList = new ArrayList<>();
         currPage = new OrchidPage(this);
         pageList.add(currPage);
+
     }
 
     /**
@@ -202,6 +210,10 @@ public class EditorComplex {
         return universalSet;
     }
 
+    public HigherOrderSet getSetOfAllSets() {
+        return setOfAllSets;
+    }
+
     /**
      * Returns the term corresponding to SEQUENCE unless sequence
      * doesn't correspond to a term.  Then it returns null
@@ -211,5 +223,21 @@ public class EditorComplex {
             return termRegistry.get(sequence);
         }
         return null;
+    }
+
+    /**
+     * Adds name/term combination to the term registry
+     */
+    public void addTerm(String name, OrchidTerm term) {
+        if (!termRegistry.containsKey(name)) {
+            termRegistry.put(name, term);
+        }
+    }
+
+    /**
+     * Adds term/set combination to the set registry
+     */
+    public void addSet(OrchidTerm term, OrchidSet set) {
+        setRegistry.put(term, set);
     }
 }

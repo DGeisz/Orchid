@@ -2,11 +2,15 @@ package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.plugs.AnonymousTermPlug;
+import com.exfizzassist.orchid.model.plugs.ModelPlug;
 import com.exfizzassist.orchid.model.plugs.NewTermNamePlug;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.sets.HigherOrderSet;
+import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
+import com.exfizzassist.orchid.model.terms.NamedTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -26,7 +30,7 @@ public class TermDefinitionFactory extends OrchidFactory {
         super(_editorComplex);
         factoryType = "term-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
-        setSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSet());
+        setSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSets());
         definitionSocket.syncWithNext(setSocket);
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
         prevSocket.syncWithNext(definitionSocket);
@@ -54,6 +58,13 @@ public class TermDefinitionFactory extends OrchidFactory {
             *  Otherwise, make the new term a member of a generic set whose parent is
             *  an element of the parent of the plug of setSocket*/
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
+            OrchidSet parentSet = setSocket.getPlug().getParentSet();
+            NamedTerm newTerm = new NamedTerm(termName, parentSet);
+            editorComplex.addTerm(termName, newTerm);
+            if (parentSet.isSubsetOf(editorComplex.getSetOfAllSets())) {
+                OrchidSet newSet = (HigherOrderSet) parentSet.newChildSet();
+                editorComplex.addSet(newTerm, newSet);
+            }
         }
     }
 

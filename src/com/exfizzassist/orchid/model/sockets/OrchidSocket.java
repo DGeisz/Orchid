@@ -139,6 +139,10 @@ public abstract class OrchidSocket {
         plug.setSocket(this);
     }
 
+    public OrchidPlug getPlug() {
+        return plug;
+    }
+
     /**
      * RETURNS true if the socket is plugged by a term
      */

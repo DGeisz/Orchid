@@ -1,6 +1,7 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.ModelPlug;
 import com.exfizzassist.orchid.model.plugs.NewTermNamePlug;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sets.MapSet;
@@ -33,9 +34,9 @@ public class MapDefinitionFactory extends OrchidFactory {
         super(_editorComplex);
         factoryType = "map-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
-        sourceSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSets());
-        targetSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSets());
-        targetSocket.setElementOf(editorComplex.getSetOfSets());
+        sourceSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfAllSets());
+        targetSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfAllSets());
+        targetSocket.setElementOf(editorComplex.getSetOfAllSets());
         definitionSocket.syncWithNext(sourceSocket);
         sourceSocket.syncWithNext(targetSocket);
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
@@ -67,7 +68,7 @@ public class MapDefinitionFactory extends OrchidFactory {
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
             MapSet parentSet = editorComplex.getGenericMapSet(sourceSocket.getPlug().getTerm().getParentSet(), targetSocket.getPlug().getTerm().getParentSet());
             NamedTerm newTerm = new NamedTerm(termName, parentSet);
-            editorComplex.addTerm(newTerm);
+            editorComplex.addTerm(termName, newTerm);
         }
     }
 

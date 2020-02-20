@@ -1,6 +1,7 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.ModelPlug;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
@@ -24,8 +25,8 @@ public class EqualityFactory extends OrchidFactory {
     public EqualityFactory(EditorComplex _editorComplex, String prevSocketId, String nextSocketId) {
         super(_editorComplex);
         factoryType = "equality-factory";
-        leftHandSide = new TermSocket(_editorComplex, this);
-        rightHandSide = new TermSocket(_editorComplex, this);
+        leftHandSide = new TermSocket(_editorComplex, this, editorComplex.getUniversalSet());
+        rightHandSide = new TermSocket(_editorComplex, this, editorComplex.getUniversalSet());
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
         OrchidSocket nextSocket = _editorComplex.getSocket(nextSocketId);
         prevSocket.syncWithNext(leftHandSide);

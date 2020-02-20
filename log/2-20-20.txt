@@ -1,0 +1,5 @@
+New day, new Orchid!
+
+I've added a methods for a set registry in EditorComplex.  Basically, whenever the
+editor defines a new term, it checks to see if the term is a set, and then
+creates a new OrchidSet corresponding to that term.

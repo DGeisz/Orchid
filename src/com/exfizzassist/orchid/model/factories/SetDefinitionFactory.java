@@ -1,8 +1,11 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.plugs.ModelPlug;
 import com.exfizzassist.orchid.model.plugs.NewTermNamePlug;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.sets.OrchidSet;
+import com.exfizzassist.orchid.model.sets.SimpleSet;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.terms.NamedTerm;
@@ -48,10 +51,16 @@ public class SetDefinitionFactory extends OrchidFactory {
 
     @Override
     public void commitNotification() {
+        /*TODO: Again, this needs to determine what kind of set is being built.
+        *  this is for a later epoch.*/
         if (definitionSocket.plugged()) {
             String setName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
             NamedTerm newTerm = new NamedTerm(setName, editorComplex.getSetOfSets());
-            editorComplex.addTerm(newTerm);
+            editorComplex.addTerm(setName, newTerm);
+            /*TODO: Change this to something more meaningful*/
+            OrchidSet newSet = new SimpleSet(setName);
+            editorComplex.addSet(newTerm, newSet);
+            /**/
         }
     }
 

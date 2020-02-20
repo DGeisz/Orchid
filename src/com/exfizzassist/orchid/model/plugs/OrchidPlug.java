@@ -1,5 +1,7 @@
 package com.exfizzassist.orchid.model.plugs;
 
+import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.factories.OrchidFactory;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import org.w3c.dom.Document;
@@ -9,6 +11,25 @@ public abstract class OrchidPlug {
      * This is the socket into which this plug plugs
      */
     private OrchidSocket socket;
+
+    /**
+     * Reference to its parent factory if one exists
+     */
+    private OrchidFactory factory;
+
+    /**
+     * Ref to editor complex
+     */
+    private EditorComplex editorComplex;
+
+    /**
+     * Plug ID*/
+    private String id;
+
+    OrchidPlug(EditorComplex _editorComplex) {
+        editorComplex = _editorComplex;
+        id = editorComplex.newId();
+    }
 
     /**
      * Socket getter
@@ -41,4 +62,16 @@ public abstract class OrchidPlug {
      * to this element
      */
     abstract public void populateHTML(Document document);
+
+    public String getId() {
+        return id;
+    }
+
+    /**
+     * Sets the parentFactory of this plug.
+     * Sets the factories parent id to this plug
+     */
+    public void setFactory(OrchidFactory factory) {
+        this.factory = factory;
+    }
 }
