@@ -4,11 +4,12 @@ import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.plugs.ModelPlug;
 import com.exfizzassist.orchid.model.plugs.NewTermNamePlug;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.plugs.TermPlug;
 import com.exfizzassist.orchid.model.sets.MapSet;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
-import com.exfizzassist.orchid.model.terms.NamedTerm;
+import com.exfizzassist.orchid.model.terms.BasicTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -46,7 +47,7 @@ public class MapDefinitionFactory extends OrchidFactory {
     }
 
     @Override
-    void populateHTML(Document document) {
+    public void populateHTML(Document document) {
         super.populateHTML(document);
         Element thisElement = document.getElementById(getId());
         definitionSocket.populateHTML(document);
@@ -66,8 +67,9 @@ public class MapDefinitionFactory extends OrchidFactory {
     public void commitNotification() {
         if (definitionSocket.plugged() && sourceSocket.plugged() && targetSocket.plugged()) {
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
-            MapSet parentSet = editorComplex.getGenericMapSet(sourceSocket.getPlug().getTerm().getParentSet(), targetSocket.getPlug().getTerm().getParentSet());
-            NamedTerm newTerm = new NamedTerm(termName, parentSet);
+            MapSet parentSet = editorComplex.getGenericMapSet(((TermPlug) sourceSocket.getPlug()).getTerm().getParentSet(), ((TermPlug) targetSocket.getPlug()).getTerm().getParentSet());
+            BasicTerm newTerm = new BasicTerm(parentSet, editorComplex.newId(), false);
+            newTerm.setName(termName);
             editorComplex.addTerm(termName, newTerm);
         }
     }
@@ -80,5 +82,22 @@ public class MapDefinitionFactory extends OrchidFactory {
             parentId = output.getId();
         }
         return output;
+    }
+
+    @Override
+    public boolean isFullyPlugged() {
+        return definitionSocket.isFullyPlugged()
+            && sourceSocket.isFullyPlugged()
+            && targetSocket.isFullyPlugged();
+    }
+
+    @Override
+    public OrchidSocket firstUnfilledSocket() {
+        if (!definitionSocket.plugged()) {
+            return definitionSocket;
+        } else if (!sourceSocket.isFullyPlugged()) {
+            return sourceSocket.firstUnfilledSocket();
+        }
+        return targetSocket.firstUnfilledSocket();
     }
 }

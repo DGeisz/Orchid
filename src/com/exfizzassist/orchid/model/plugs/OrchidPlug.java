@@ -23,12 +23,26 @@ public abstract class OrchidPlug {
     private EditorComplex editorComplex;
 
     /**
-     * Plug ID*/
+     * Plug ID
+     */
     private String id;
+
+    /**
+     * Id of parent
+     */
+    private String parentId;
 
     OrchidPlug(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
         id = editorComplex.newId();
+    }
+
+
+    /**
+     * ParentId getter
+     */
+    public String getParentId() {
+        return parentId;
     }
 
     /**
@@ -42,20 +56,38 @@ public abstract class OrchidPlug {
      * Socket setter
      */
     public void setSocket(OrchidSocket socket) {
+        parentId = socket.getId();
         this.socket = socket;
+    }
+
+    /**
+     * Factory getter
+     */
+    public OrchidFactory getFactory() {
+        return factory;
     }
 
     /**
      * Returns the first child socket that isn't filled
      * or null if it doesn't have a parent factory
      */
-    abstract public OrchidSocket firstUnfilledSocket();
+    public OrchidSocket firstUnfilledSocket() {
+        if (factory != null) {
+            return factory.firstUnfilledSocket();
+        }
+        return null;
+    }
 
     /**
      * RETURNS true if the term doesn't have children,
      * or if all the child sockets are already plugged
      */
-    abstract public boolean isFullyPlugged();
+    public boolean isFullyPlugged() {
+        if (factory != null) {
+            return factory.isFullyPlugged();
+        }
+        return false;
+    }
 
     /**
      * Populate the DOM with HTML corresponding

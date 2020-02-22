@@ -1,16 +1,13 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
-import com.exfizzassist.orchid.model.plugs.AnonymousTermPlug;
-import com.exfizzassist.orchid.model.plugs.ModelPlug;
-import com.exfizzassist.orchid.model.plugs.NewTermNamePlug;
-import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.plugs.*;
 import com.exfizzassist.orchid.model.sets.HigherOrderSet;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
-import com.exfizzassist.orchid.model.terms.NamedTerm;
+import com.exfizzassist.orchid.model.terms.BasicTerm;
 import com.exfizzassist.orchid.model.terms.SetTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -31,7 +28,7 @@ public class TermDefinitionFactory extends OrchidFactory {
         super(_editorComplex);
         factoryType = "term-definition-factory";
         definitionSocket = new DefinitionSocket(_editorComplex, this);
-        setSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfSets());
+        setSocket = new TermSocket(_editorComplex, this, editorComplex.getSetOfAllSets());
         definitionSocket.syncWithNext(setSocket);
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
         prevSocket.syncWithNext(definitionSocket);
@@ -40,7 +37,7 @@ public class TermDefinitionFactory extends OrchidFactory {
     }
 
     @Override
-    void populateHTML(Document document) {
+    public void populateHTML(Document document) {
         super.populateHTML(document);
         Element thisElement = document.getElementById(getId());
         definitionSocket.populateHTML(document);
@@ -59,14 +56,16 @@ public class TermDefinitionFactory extends OrchidFactory {
             *  Otherwise, make the new term a member of a generic set whose parent is
             *  an element of the parent of the plug of setSocket*/
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
-            OrchidSet parentSet = setSocket.getPlug().getParentSet();
+            OrchidSet parentSet = ((TermPlug)setSocket.getPlug()).getTerm().getParentSet();
             if (parentSet.isSubsetOf(editorComplex.getSetOfAllSets())) {
-                OrchidSet newSet = ((HigherOrderSet) parentSet).newChildSet(termName);
+                OrchidSet newSet = ((HigherOrderSet) parentSet).newChildSet(editorComplex.newId(), editorComplex.getUniversalSet());
                 editorComplex.addSet(newSet);
-                SetTerm newSetTerm = new SetTerm(termName, newSet, parentSet);
+                SetTerm newSetTerm = new SetTerm(newSet, parentSet, editorComplex.newId(), false);
+                newSetTerm.setName(termName);
                 editorComplex.addTerm(termName, newSetTerm);
             } else {
-                NamedTerm newTerm = new NamedTerm(termName, parentSet);
+                BasicTerm newTerm = new BasicTerm(parentSet, editorComplex.newId(), false);
+                newTerm.setName(termName);
                 editorComplex.addTerm(termName, newTerm);
             }
         }
@@ -80,5 +79,19 @@ public class TermDefinitionFactory extends OrchidFactory {
             parentId = output.getId();
         }
         return output;
+    }
+
+    @Override
+    public boolean isFullyPlugged() {
+        return setSocket.isFullyPlugged()
+            && definitionSocket.isFullyPlugged();
+    }
+
+    @Override
+    public OrchidSocket firstUnfilledSocket() {
+        if (!setSocket.isFullyPlugged()) {
+            return setSocket.firstUnfilledSocket();
+        }
+        return definitionSocket.firstUnfilledSocket();
     }
 }

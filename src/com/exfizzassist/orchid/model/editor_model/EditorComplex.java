@@ -1,12 +1,15 @@
 package com.exfizzassist.orchid.model.editor_model;
 
 import com.exfizzassist.orchid.model.factories.*;
+import com.exfizzassist.orchid.model.maps.OrchidMap;
 import com.exfizzassist.orchid.model.sets.HigherOrderSet;
+import com.exfizzassist.orchid.model.sets.MapSet;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sets.UniversalSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.terms.OrchidTerm;
 import com.exfizzassist.orchid.view.EquationEditorController;
+import com.sun.org.apache.xpath.internal.operations.Or;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -28,7 +31,12 @@ public class EditorComplex {
     /**
      * Registry of all defined sets
      */
-    private ArrayList<OrchidSet> setRegistry;
+    private HashMap<String, OrchidSet> setRegistry;
+
+    /**
+     * Registry of all generic map sets
+     */
+    private HashMap<GenericMapSetKey, String> genericMapSetRegistry;
 
     /**
      * List of all pages contained within the editor
@@ -57,24 +65,24 @@ public class EditorComplex {
     /**
      * ArrayList of built in sequences
      */
-    private final ArrayList<String> builtInSeq = new ArrayList<String>(){{
-        builtInSeq.add(termDef);
-        builtInSeq.add(mapDef);
-        builtInSeq.add(setDef);
-        builtInSeq.add(equality);
-        builtInSeq.add(mapSeq);
-    }};
+    private ArrayList<String> builtInSeq;
+//    private ArrayList<String> builtInSeq = new ArrayList<String>() {{
+//        builtInSeq.add(termDef);
+//        builtInSeq.add(mapDef);
+//        builtInSeq.add(setDef);
+//        builtInSeq.add(equality);
+//        builtInSeq.add(mapSeq);
+//    }};
 
     /**
      * The universal set for this editor
      */
-    private final UniversalSet universalSet = new UniversalSet();
+    private final UniversalSet universalSet = new UniversalSet(newId());
 
     /**
      * Set of all sets
      */
-    private final HigherOrderSet setOfAllSets = new HigherOrderSet();
-
+    private HigherOrderSet setOfAllSets;
 
 
     /**
@@ -83,14 +91,26 @@ public class EditorComplex {
      */
     public EditorComplex() {
 
-        dock = new Dock(this);
         termRegistry = new HashMap<>();
         socketRegistry = new HashMap<>();
-        setRegistry = new ArrayList<>();
+        setRegistry = new HashMap<>();
         pageList = new ArrayList<>();
         currPage = new OrchidPage(this);
         pageList.add(currPage);
+        dock = new Dock(this);
 
+        /*TODO: Not quite sure what special properties to
+        *  give the set of all sets, but it will just be average
+        *   HigherOrderSet for now*/
+        setOfAllSets = new HigherOrderSet(newId(), getUniversalSet());
+
+        /*TODO: Test.  Getting it up and running*/
+        builtInSeq = new ArrayList<>();
+        builtInSeq.add(mapDef);
+        builtInSeq.add(termDef);
+        builtInSeq.add(setDef);
+        builtInSeq.add(equality);
+        builtInSeq.add(mapSeq);
     }
 
     /**
@@ -112,7 +132,6 @@ public class EditorComplex {
      * @return dock
      */
     public Dock getDock() {
-
         return dock;
     }
 
@@ -120,7 +139,6 @@ public class EditorComplex {
      * @return currPage
      */
     public OrchidPage getCurrentPage() {
-
         return currPage;
     }
 
@@ -238,6 +256,57 @@ public class EditorComplex {
      * Adds term/set combination to the set registry
      */
     public void addSet(OrchidSet set) {
-        setRegistry.add(set);
+        setRegistry.put(set.getId(), set);
+    }
+
+    /**
+     * Returns a generic MapSet with corresponding to a map
+     * from SOURCE to TARGET.  Creates a new generic MapSet
+     * if one of this type doesn't yet exist.
+     */
+    public MapSet getGenericMapSet(OrchidSet source, OrchidSet target) {
+        GenericMapSetKey currKey = new GenericMapSetKey(source.getId(), target.getId());
+        if (genericMapSetRegistry.containsKey(currKey)) {
+            return (MapSet) setRegistry.get(genericMapSetRegistry.get(currKey));
+        }
+        MapSet newGeneric = new MapSet(currKey.getMap(), newId(), getUniversalSet());
+        genericMapSetRegistry.put(new GenericMapSetKey(source.getId(), target.getId()), newGeneric.getId());
+        return newGeneric;
+    }
+
+    /**
+     * Simple set that stores the source and target Ids for generic map sets.
+     * This is specifically so that GenericMapSets can be quickly and easily found.
+     */
+    private class GenericMapSetKey {
+        private String sourceId;
+        private String targetId;
+        private OrchidMap map;
+
+        GenericMapSetKey(String sourceId, String targetId) {
+            this.sourceId = sourceId;
+            this.targetId = targetId;
+        }
+
+        OrchidMap getMap() {
+            if (map == null) {
+                map = new OrchidMap(setRegistry.get(sourceId), setRegistry.get(targetId));
+            }
+            return map;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof GenericMapSetKey) {
+                GenericMapSetKey s = (GenericMapSetKey) obj;
+                return sourceId.equals(s.sourceId) && targetId.equals(s.targetId);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return (sourceId + targetId).hashCode();
+        }
     }
 }

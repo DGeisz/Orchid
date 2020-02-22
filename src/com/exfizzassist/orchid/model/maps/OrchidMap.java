@@ -11,7 +11,7 @@ public class OrchidMap {
     /** Target set (target)*/
     private OrchidSet target;
 
-    OrchidMap(OrchidSet source, OrchidSet target) {
+    public OrchidMap(OrchidSet source, OrchidSet target) {
         this.source = source;
         this.target = target;
     }

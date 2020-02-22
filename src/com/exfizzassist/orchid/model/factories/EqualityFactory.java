@@ -35,7 +35,7 @@ public class EqualityFactory extends OrchidFactory {
     }
 
     @Override
-    void populateHTML(Document document) {
+    public void populateHTML(Document document) {
         super.populateHTML(document);
         Element thisElement = document.getElementById(getId());
         leftHandSide.populateHTML(document);
@@ -72,5 +72,20 @@ public class EqualityFactory extends OrchidFactory {
             parentId = output.getId();
         }
         return output;
+    }
+
+    @Override
+    public boolean isFullyPlugged() {
+        return leftHandSide.isFullyPlugged() && rightHandSide.isFullyPlugged();
+    }
+
+    @Override
+    public OrchidSocket firstUnfilledSocket() {
+        if (!leftHandSide.isFullyPlugged()) {
+            return leftHandSide.firstUnfilledSocket();
+        } else if (!rightHandSide.isFullyPlugged()) {
+            return rightHandSide.firstUnfilledSocket();
+        }
+        return null;
     }
 }

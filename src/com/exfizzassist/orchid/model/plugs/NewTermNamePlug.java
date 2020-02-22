@@ -3,6 +3,7 @@ package com.exfizzassist.orchid.model.plugs;
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class NewTermNamePlug extends OrchidPlug {
 
@@ -21,18 +22,14 @@ public class NewTermNamePlug extends OrchidPlug {
         return sequence;
     }
 
-    @Override
-    public OrchidSocket firstUnfilledSocket() {
-        return null;
-    }
-
-    @Override
-    public boolean isFullyPlugged() {
-        return false;
-    }
 
     @Override
     public void populateHTML(Document document) {
-
+        Element parentElement = document.getElementById(getParentId());
+        Element thisElement = document.createElement("span");
+        thisElement.setAttribute("class", "model-plug");
+        thisElement.setAttribute("id", getId());
+        thisElement.setTextContent(sequence);
+        parentElement.appendChild(thisElement);
     }
 }

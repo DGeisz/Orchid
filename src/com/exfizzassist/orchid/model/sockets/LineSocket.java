@@ -54,7 +54,7 @@ public class LineSocket extends OrchidSocket{
             setPlug(newFactory.getFactoryOutput());
             plug.populateHTML(document);
         } else if (editorComplex.isDefinedTerm(sequence)) {
-            setPlug(new TermPlug(editorComplex, sequence));
+            setPlug(new TermPlug(editorComplex, editorComplex.getTerm(sequence)));
             plug.populateHTML(document);
         }
         parentFactory.commitNotification();

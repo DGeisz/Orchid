@@ -1,12 +1,16 @@
 package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
-import com.exfizzassist.orchid.model.plugs.AnonymousTermPlug;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.plugs.TermPlug;
+import com.exfizzassist.orchid.model.sets.HigherOrderSet;
 import com.exfizzassist.orchid.model.sets.MapSet;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
+import com.exfizzassist.orchid.model.terms.BasicTerm;
+import com.exfizzassist.orchid.model.terms.OrchidTerm;
+import com.exfizzassist.orchid.model.terms.SetTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -41,7 +45,7 @@ public class MapFactory extends OrchidFactory {
     }
 
     @Override
-    void populateHTML(Document document) {
+    public void populateHTML(Document document) {
         super.populateHTML(document);
         Element thisElement = document.getElementById(getId());
         mapTermSocket.populateHTML(document);
@@ -64,20 +68,45 @@ public class MapFactory extends OrchidFactory {
             return;
         }
         if (!mapTermPlugged) {
-            mapTermSocket.setElementOf(editorComplex.getGenericMapSet(argument.getElementOf(), outputParentSet);
+            mapTermSocket.setElementOf(editorComplex.getGenericMapSet(argument.getElementOf(), outputParentSet));
         } else if (!argPlugged) {
-            argument.setElementOf(((MapSet) mapTermSocket.getPlug().getTerm().getParentSet()).getSource());
+            argument.setElementOf(((MapSet) ((TermPlug) mapTermSocket.getPlug())
+                .getTerm()
+                .getParentSet())
+                .getMap()
+                .getSource());
         }
     }
 
     @Override
     public OrchidPlug getFactoryOutput() {
         if (output == null) {
-            output = new AnonymousTermPlug(editorComplex, outputParentSet);
+            OrchidTerm derivedTerm;
+            if (outputParentSet.isHigherOrderSet()) {
+                OrchidSet newSet = ((HigherOrderSet) outputParentSet).newChildSet(editorComplex.newId(), editorComplex.getUniversalSet());
+                derivedTerm = new SetTerm(newSet, outputParentSet, editorComplex.newId(), true);
+            } else {
+                derivedTerm = new BasicTerm(outputParentSet, editorComplex.newId(), true);
+            }
+            output = new TermPlug(editorComplex, derivedTerm);
             output.setFactory(this);
             parentId = output.getId();
         }
         return output;
+    }
+
+    @Override
+    public boolean isFullyPlugged() {
+        return mapTermSocket.isFullyPlugged()
+            && argument.isFullyPlugged();
+    }
+
+    @Override
+    public OrchidSocket firstUnfilledSocket() {
+        if (!mapTermSocket.isFullyPlugged()) {
+            return mapTermSocket.firstUnfilledSocket();
+        }
+        return argument.firstUnfilledSocket();
     }
 
     /**

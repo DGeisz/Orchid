@@ -4,29 +4,35 @@ import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.terms.OrchidTerm;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 public class TermPlug extends OrchidPlug {
 
-    public TermPlug(EditorComplex _editorComplex, String sequence) {
-        /*TODO: PHASE I log 2-13-20 implement.*/
-    }
+    /**
+     * Term to which this plug this plug corresponds
+     */
+    private OrchidTerm term;
 
     public TermPlug(EditorComplex _editorComplex, OrchidTerm term) {
-        /*TODO: PHASE I implement*/
+        super(_editorComplex);
+        this.term = term;
     }
 
-    @Override
-    public OrchidSocket firstUnfilledSocket() {
-        return null;
-    }
-
-    @Override
-    public boolean isFullyPlugged() {
-        return false;
+    public OrchidTerm getTerm() {
+        return term;
     }
 
     @Override
     public void populateHTML(Document document) {
-
+        Element parentElement = document.getElementById(getParentId());
+        Element thisElement = document.createElement("span");
+        thisElement.setAttribute("class", "model-plug");
+        thisElement.setAttribute("id", getId());
+        parentElement.appendChild(thisElement);
+        if (term.isDerived()) {
+            getFactory().populateHTML(document);
+            return;
+        }
+        thisElement.setTextContent(term.getName());
     }
 }

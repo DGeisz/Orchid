@@ -2,6 +2,7 @@ package com.exfizzassist.orchid.model.factories;
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -45,7 +46,7 @@ public abstract class OrchidFactory {
      * corresponding to this factory.  All
      * elements are children of parendId
      */
-    void populateHTML(Document document) {
+    public void populateHTML(Document document) {
         Element parent = document.getElementById(parentId);
         Element thisElement = document.createElement("span");
         if (getFactoryType() != null) {
@@ -70,6 +71,16 @@ public abstract class OrchidFactory {
      * output plug if it doesn't yet exist, and then returns the plug
      */
     abstract public OrchidPlug getFactoryOutput();
+
+    /**
+     * Returns true if all sockets are plugged
+     */
+    abstract public boolean isFullyPlugged();
+
+    /**
+     * Returns the first unfilled child socket,
+     * or null if all sockets are filled*/
+    abstract public OrchidSocket firstUnfilledSocket();
 
     /**
      * Get factoryType

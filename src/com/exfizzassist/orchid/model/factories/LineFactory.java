@@ -92,6 +92,11 @@ public class LineFactory extends OrchidFactory{
         return null;
     }
 
+    @Override
+    public boolean isFullyPlugged() {
+        return false;
+    }
+
 
     /**
      * @returns either content socket or the first non-empty

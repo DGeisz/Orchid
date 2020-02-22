@@ -10,12 +10,15 @@ public class CartesianProductSet extends OrchidSet {
      */
     ArrayList<OrchidSet> setFactors;
 
-    CartesianProductSet(String unparsed) {
-        this.identifier = unparsed;
+    CartesianProductSet(String id, OrchidSet universalSet) {
+        super(id);
+        addSuperSet(universalSet);
     }
 
-    CartesianProductSet(ArrayList<OrchidSet> factors) {
-        setFactors = factors;
+
+    @Override
+    public boolean isSubsetOf(OrchidSet otherSet) {
+        return false;
     }
 
     @Override

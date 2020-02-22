@@ -9,8 +9,18 @@ public class MapSet extends OrchidSet {
      */
     OrchidMap map;
 
-    public MapSet(OrchidMap map) {
+    /**
+     * Indicates whether this set is a generic map set
+     */
+    boolean isGeneric;
+
+
+    /** Constructor for a non*/
+    public MapSet(OrchidMap map, String id, OrchidSet universalSet) {
+        super(id);
+        addSuperSet(universalSet);
         this.map = map;
+        isGeneric = false;
     }
 
     @Override

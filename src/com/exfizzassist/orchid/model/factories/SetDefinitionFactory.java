@@ -8,7 +8,6 @@ import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sets.SimpleSet;
 import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
-import com.exfizzassist.orchid.model.terms.NamedTerm;
 import com.exfizzassist.orchid.model.terms.SetTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -37,7 +36,7 @@ public class SetDefinitionFactory extends OrchidFactory {
     }
 
     @Override
-    void populateHTML(Document document) {
+    public void populateHTML(Document document) {
         super.populateHTML(document);
         Element thisElement = document.getElementById(getId());
         definitionSocket.populateHTML(document);
@@ -57,9 +56,10 @@ public class SetDefinitionFactory extends OrchidFactory {
         if (definitionSocket.plugged()) {
             String setName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
             /*TODO: Change this to something more meaningful*/
-            OrchidSet newSet = new SimpleSet(setName);
+            OrchidSet newSet = new SimpleSet(setName, editorComplex.newId(), editorComplex.getUniversalSet());
             editorComplex.addSet(newSet);
-            SetTerm newTerm = new SetTerm(setName, newSet, editorComplex.getSetOfAllSets());
+            SetTerm newTerm = new SetTerm(newSet, editorComplex.getSetOfAllSets(), editorComplex.newId(), false);
+            newTerm.setName(setName);
             editorComplex.addTerm(setName, newTerm);
         }
     }
@@ -72,5 +72,15 @@ public class SetDefinitionFactory extends OrchidFactory {
             parentId = output.getId();
         }
         return output;
+    }
+
+    @Override
+    public boolean isFullyPlugged() {
+        return definitionSocket.isFullyPlugged();
+    }
+
+    @Override
+    public OrchidSocket firstUnfilledSocket() {
+        return definitionSocket.firstUnfilledSocket();
     }
 }
