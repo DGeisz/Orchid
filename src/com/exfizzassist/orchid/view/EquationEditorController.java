@@ -83,10 +83,17 @@ public class EquationEditorController {
 
         /*Skeleton content for the current windows*/
         String editorContent = "<html><body id='editor-body'></body></html>";
-        String termsContent = "<html><body id='terms-body'></body></html>";
+        String termsContent = "<html><body id='terms-body'>" +
+            "<p>Terms:</p>" +
+            "<span id='defined-terms'>" +
+            "</span>" +
+            "</body>" +
+            "</html>";
 
         /* Loads Stylesheet for the editor window*/
         editorEngine.setUserStyleSheetLocation(getClass().getResource("../style/WebViewStyle.css").toString());
+        /*TODO: Change to its own sheet*/
+        termsEngine.setUserStyleSheetLocation(getClass().getResource("../style/WebViewStyle.css").toString());
 
         /* Loads the starting content of this session*/
         editorEngine.loadContent(editorContent, "text/html");
@@ -174,6 +181,12 @@ public class EquationEditorController {
 
         /*TODO: EPOCH I: PHASE Lambda. Populate the termsHTML as well.  In first round of implementation
         *  I'm focusing specifically on the editor window, so this will be done later*/
+    }
+
+    /**
+     * Returns the document of the Terms page*/
+    public Document getTermsDocument() {
+        return termsEngine.getDocument();
     }
 }
 

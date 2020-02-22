@@ -9,12 +9,17 @@ import com.exfizzassist.orchid.model.sets.UniversalSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.terms.OrchidTerm;
 import com.exfizzassist.orchid.view.EquationEditorController;
-import com.sun.org.apache.xpath.internal.operations.Or;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EditorComplex {
+
+    /**
+     * Reference to the EquationEditorController*/
+    private EquationEditorController editorController;
 
     /**
      * Registry of all defined terms in the current session
@@ -167,6 +172,7 @@ public class EditorComplex {
      * latches the controller to the dock
      */
     public void configureEditorController(EquationEditorController controller) {
+        editorController = controller;
         controller.latchOntoDock(dock);
     }
 
@@ -250,6 +256,12 @@ public class EditorComplex {
     public void addTerm(String name, OrchidTerm term) {
         if (!termRegistry.containsKey(name)) {
             termRegistry.put(name, term);
+            Document termsDoc = editorController.getTermsDocument();
+            Element termsList = termsDoc.getElementById("defined-terms");
+            Element newTerm = termsDoc.createElement("p");
+            newTerm.setAttribute("class", "single-term");
+            newTerm.setTextContent(name);
+            termsList.appendChild(newTerm);
         }
     }
 
