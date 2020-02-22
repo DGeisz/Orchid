@@ -16,14 +16,7 @@ public class LineSocket extends OrchidSocket{
 
     @Override
     public void populateHTML(Document document) {
-        Element parentElement = document.getElementById(parentId);
-        Element thisElement = document.createElement("span");
-        thisElement.setAttribute("class", "line-socket");
-        thisElement.setAttribute("id", getId());
-        parentElement.appendChild(thisElement);
-        if (plugged()) {
-            plug.populateHTML(document);
-        }
+        super.populateHTML(document);
     }
 
     @Override

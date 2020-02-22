@@ -2,6 +2,7 @@ package com.exfizzassist.orchid.model.factories;
 
 
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
+import com.exfizzassist.orchid.model.editor_model.OrchidPage;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
 import com.exfizzassist.orchid.model.sockets.EndLineSocket;
 import com.exfizzassist.orchid.model.sockets.LineSocket;
@@ -12,11 +13,6 @@ import org.w3c.dom.Element;
 import java.util.ArrayList;
 
 public class LineFactory extends OrchidFactory{
-
-    /**
-     * The current socket manipulated in the line
-     */
-    private OrchidSocket currSocket;
 
     /**
      * Id of the previous line
@@ -34,25 +30,25 @@ public class LineFactory extends OrchidFactory{
      */
     private EndLineSocket endLineSocket;
 
-
     /**
-     * ID of this current line
+     * Reference to the parent page
      */
-    private String lineId;
+    private OrchidPage parentPage;
+
 
     /*TODO: Figure out how to initialize a socket so
     *  that it has the correct ids*/
 
-    public LineFactory(String prevLineId, EditorComplex _editorComplex, String pageId) {
-        this(_editorComplex, pageId);
+    public LineFactory(String prevLineId, EditorComplex _editorComplex, OrchidPage parentPage, String pageId) {
+        this(_editorComplex, parentPage, pageId);
         this.prevLineId = prevLineId;
     }
 
-    public LineFactory(EditorComplex _editorComplex, String pageId) {
+    public LineFactory(EditorComplex _editorComplex, OrchidPage parentPage, String pageId) {
         super(_editorComplex);
-        setId(pageId);
+        this.parentPage = parentPage;
+        setParentId(pageId);
         this.prevLineId = "";
-        lineId = editorComplex.newId();
         contentSocket = new LineSocket(editorComplex, this);
         endLineSocket = new EndLineSocket(editorComplex, this);
         contentSocket.setPrevId("");
@@ -73,17 +69,28 @@ public class LineFactory extends OrchidFactory{
     @Override
     public void populateHTML(Document document) {
         Element pageElement = document.getElementById(parentId);
-        Element lineHtml = document.createElement("span");
+        System.out.println("Page Element");
+        System.out.println(pageElement);
+        Element lineHtml = document.createElement("p");
         lineHtml.setAttribute("class", "line");
-        lineHtml.setAttribute("id", lineId);
+        lineHtml.setAttribute("id", getId());
         pageElement.appendChild(lineHtml);
         contentSocket.populateHTML(document);
         endLineSocket.populateHTML(document);
     }
 
     @Override
-    public void commitNotification() {}
+    public void commitNotification() {
+    }
 
+    /**
+     * Called by EndLineSocket when the line is
+     * finished and the editor is ready for a new line.
+     * Returns the id of the first socket of the new line.
+     */
+    public String signalNewLine(Document document) {
+        return parentPage.newLineAndPopulateHTML(document);
+    }
     /**
      * Line factories are the only factories that don't return plugs.
      */

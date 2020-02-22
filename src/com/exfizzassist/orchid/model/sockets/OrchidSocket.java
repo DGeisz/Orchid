@@ -59,6 +59,11 @@ public abstract class OrchidSocket {
         parentId = parentFactory.getId();
     }
 
+    @Override
+    public String toString() {
+        return socketType + " " + id;
+    }
+
     /**
      * @return id
      */
@@ -102,6 +107,8 @@ public abstract class OrchidSocket {
     public void populateHTML(Document document) {
         Element parentElement = document.getElementById(parentId);
         Element thisElement = document.createElement("span");
+        thisElement.setAttribute("class", socketType);
+        thisElement.setAttribute("id", getId());
         parentElement.appendChild(thisElement);
         if (plugged()) {
             plug.populateHTML(document);

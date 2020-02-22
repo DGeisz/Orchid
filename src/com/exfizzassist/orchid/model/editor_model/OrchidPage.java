@@ -1,10 +1,12 @@
 package com.exfizzassist.orchid.model.editor_model;
 
 import com.exfizzassist.orchid.model.factories.LineFactory;
+import com.exfizzassist.orchid.model.sockets.LineSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.sound.sampled.Line;
 import java.util.ArrayList;
 
 /**Represents one editor page.  You know how you
@@ -64,12 +66,20 @@ public class OrchidPage {
     }
 
     /**
+     * Return the last available line*/
+    LineFactory getLastLine() {
+        return lineList.get(lineList.size() - 1);
+    }
+
+    /**
      * Takes information about the structures this page contains
      * and populates the editor document skeleton with HTML. Returns
      * the last unfilled Id.
      */
     void populateEditorHTML(Document document) {
         Element body = document.getElementById("editor-body");
+        System.out.println("Body Element");
+        System.out.println(body);
         Element pageHtml = document.createElement("span");
         pageHtml.setAttribute("class", "page");
         pageHtml.setAttribute("id", pageId);
@@ -84,12 +94,25 @@ public class OrchidPage {
      */
     void newLine() {
         if (lineList.isEmpty()) {
-            lineList.add(new LineFactory(editorComplex, pageId));
+            LineFactory line = new LineFactory(editorComplex, this, pageId);
+            lineList.add(line);
             lastId = lineList.get(0).lastId();
         } else {
-            lineList.add(new LineFactory(lastId, editorComplex, pageId));
+            LineFactory line = new LineFactory(lastId, editorComplex, this, pageId);
+            lineList.add(line);
             lastId = lineList.get(lineList.size() - 1).lastId();
         }
+    }
 
+    /**
+     * Called by line factory to indicate that the
+     * current line is completed and the editor is ready
+     * for a new line.  Creates new line, and returns the id
+     * of the first socket of the new line.
+     */
+    public String newLineAndPopulateHTML(Document document) {
+        newLine();
+        getLastLine().populateHTML(document);
+        return getLastLine().firstUnfilledSocket().getId();
     }
 }

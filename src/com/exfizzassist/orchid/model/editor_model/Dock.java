@@ -42,8 +42,8 @@ public class Dock {
     /** Initializes Dock with an editorComplex*/
     Dock(EditorComplex _editorComplex) {
         editorComplex = _editorComplex;
-        currId = editorComplex.getCurrentPage().getLastId();
-        dockedSocket = editorComplex.getSocket(currId);
+        dockedSocket = editorComplex.getCurrentPage().getLastLine().firstUnfilledSocket();
+        currId = dockedSocket.getId();
         currSequence = "";
     }
 
@@ -63,10 +63,11 @@ public class Dock {
      * to the current sequence, and sets its color according to sequenceStatus
      */
     public void intakeCharacter(String character, Document document) {
+        System.out.println(character);
         currSequence += character;
-        Element currSocketElement = document.getElementById(currId);
-        currSocketElement.setTextContent(currSequence);
-        currSocketElement.setAttribute("class", dockedSocket.getSocketType()
+        Element dockedElement = document.getElementById(currId);
+        dockedElement.setTextContent(currSequence);
+        dockedElement.setAttribute("class", dockedSocket.getSocketType()
             + " " + dockedSocket.sequenceStatus(currSequence));
     }
 
@@ -77,11 +78,23 @@ public class Dock {
      */
     public void attemptCommitSequence(Document document) {
         if (dockedSocket.isAllowedSequence(currSequence)) {
+            Element docketElement = document.getElementById(currId);
+            docketElement.setTextContent("");
             currId = dockedSocket.commitSequence(currSequence, document);
+            System.out.println("Current ID");
+            System.out.println(currId);
+            try {
+                printDocument(document, System.out);
+            } catch (IOException | TransformerException e) {
+                System.out.println(e);
+            }
+            currSequence = "";
         }
-        Element currSocketElement = document.getElementById(currId);
-        currSocketElement.setTextContent(currSequence);
-        currSocketElement.setAttribute("class", dockedSocket.getSocketType() + " red");
+        dockedSocket = editorComplex.getSocket(currId);
+        Element dockedElement = document.getElementById(currId);
+        System.out.println(dockedElement.toString());
+//        dockedElement.setTextContent(currSequence);
+        dockedElement.setAttribute("class", dockedSocket.getSocketType() + " red");
     }
 
     /**
@@ -90,12 +103,8 @@ public class Dock {
      * some capacity.
      */
     public void populateEditorHTML(Document editorDoc) {
-        try {
-            printDocument(editorDoc, System.out);
-        } catch (IOException | TransformerException e) {
-            System.out.println(e);
-        }
         Element body = editorDoc.getElementById("editor-body");
+        System.out.println(body);
         /* Determine if the body has any children, i.e html is already populated.*/
         if (body.getChildNodes().getLength() == 0) {
             editorComplex.getCurrentPage().populateEditorHTML(editorDoc);
@@ -116,6 +125,11 @@ public class Dock {
         } else {
             /*TODO: EPOCH II: Handle an already populated */
         }
+        try {
+            printDocument(editorDoc, System.out);
+        } catch (IOException | TransformerException e) {
+            System.out.println(e);
+        }
     }
 
     /**
@@ -123,9 +137,15 @@ public class Dock {
      * the equation model to handle a backspace on an empty
      * socket, or an already committed sequence.  The only
      */
-    public String handleBackSpace(Document document) {
+    public void handleBackSpace(Document document) {
+        if (currSequence.length() > 0) {
+            currSequence = currSequence.substring(0, currSequence.length() - 1);
+        }
+        Element dockedElement = document.getElementById(currId);
+        dockedElement.setTextContent(currSequence);
+        dockedElement.setAttribute("class", dockedSocket.getSocketType()
+            + " " + dockedSocket.sequenceStatus(currSequence));
         /*TODO: PHASE II: Implement this actual method.  For now this just returns 1*/
-        return "1";
     }
 
     /**

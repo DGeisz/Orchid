@@ -98,6 +98,7 @@ public class EditorComplex {
         currPage = new OrchidPage(this);
         pageList.add(currPage);
         dock = new Dock(this);
+        genericMapSetRegistry = new HashMap<>();
 
         /*TODO: Not quite sure what special properties to
         *  give the set of all sets, but it will just be average

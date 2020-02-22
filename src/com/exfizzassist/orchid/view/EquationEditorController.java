@@ -124,6 +124,7 @@ public class EquationEditorController {
     private void handleSpecialKeys(Document doc, KeyEvent event) {
 
         if (event.getCode().equals(KeyCode.BACK_SPACE)) {
+            dock.handleBackSpace(doc);
             /*TODO: PHASE II: implement deletion from controller side*/
             /*This is basic functionality to delete a char.  Change when
             * you actually implement this*/
