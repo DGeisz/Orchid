@@ -86,7 +86,7 @@ public abstract class OrchidPlug {
         if (factory != null) {
             return factory.isFullyPlugged();
         }
-        return false;
+        return true;
     }
 
     /**

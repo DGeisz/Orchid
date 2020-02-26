@@ -78,16 +78,17 @@ public class Dock {
      */
     public void attemptCommitSequence(Document document) {
         if (dockedSocket.isAllowedSequence(currSequence)) {
-            Element docketElement = document.getElementById(currId);
-            docketElement.setTextContent("");
+            Element dockedElement = document.getElementById(currId);
+            dockedElement.setTextContent("");
+            dockedElement.setAttribute("class", dockedSocket.getSocketType() + " black");
             currId = dockedSocket.commitSequence(currSequence, document);
-            System.out.println("Current ID");
-            System.out.println(currId);
-            try {
-                printDocument(document, System.out);
-            } catch (IOException | TransformerException e) {
-                System.out.println(e);
-            }
+//            System.out.println("Current ID");
+//            System.out.println(currId);
+//            try {
+//                printDocument(document, System.out);
+//            } catch (IOException | TransformerException e) {
+//                System.out.println(e);
+//            }
             currSequence = "";
         }
         dockedSocket = editorComplex.getSocket(currId);
@@ -125,11 +126,11 @@ public class Dock {
         } else {
             /*TODO: EPOCH II: Handle an already populated */
         }
-        try {
-            printDocument(editorDoc, System.out);
-        } catch (IOException | TransformerException e) {
-            System.out.println(e);
-        }
+//        try {
+//            printDocument(editorDoc, System.out);
+//        } catch (IOException | TransformerException e) {
+//            System.out.println(e);
+//        }
     }
 
     /**
@@ -140,11 +141,11 @@ public class Dock {
     public void handleBackSpace(Document document) {
         if (currSequence.length() > 0) {
             currSequence = currSequence.substring(0, currSequence.length() - 1);
+            Element dockedElement = document.getElementById(currId);
+            dockedElement.setTextContent(currSequence);
+            dockedElement.setAttribute("class", dockedSocket.getSocketType()
+                + " " + dockedSocket.sequenceStatus(currSequence));
         }
-        Element dockedElement = document.getElementById(currId);
-        dockedElement.setTextContent(currSequence);
-        dockedElement.setAttribute("class", dockedSocket.getSocketType()
-            + " " + dockedSocket.sequenceStatus(currSequence));
         /*TODO: PHASE II: Implement this actual method.  For now this just returns 1*/
     }
 

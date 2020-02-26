@@ -23,10 +23,6 @@ public class HigherOrderSet extends OrchidSet {
         return new SimpleSet(id, universalSet);
     }
 
-    @Override
-    public boolean isSubsetOf(OrchidSet otherSet) {
-        return false;
-    }
 
     @Override
     public boolean isHigherOrderSet() {

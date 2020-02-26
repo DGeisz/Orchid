@@ -43,10 +43,17 @@ public class TermSocket extends OrchidSocket {
 
     @Override
     public boolean isAllowedSequence(String sequence) {
+//        System.out.println("Debug 1: passed");
+        if (editorComplex.isMapSequence(sequence)) {
+            return true;
+        }
         if (!editorComplex.isDefinedTerm(sequence)) {
+//            System.out.println("Debug 2: passed");
             return false;
         }
         OrchidTerm currTerm = editorComplex.getTerm(sequence);
+//        System.out.println("Set 1 Id: " + currTerm.getName());
+//        System.out.println("Set 2 Id: " + elementOf.getId());
         if (currTerm.getParentSet().isSubsetOf(elementOf)) {
             return true;
         }
@@ -58,6 +65,13 @@ public class TermSocket extends OrchidSocket {
 
     @Override
     public String commitSequence(String sequence, Document document) {
+        if (editorComplex.isMapSequence(sequence)) {
+            OrchidFactory newMapFactory = editorComplex.factoryBuilder(sequence, getId(), getNextId());
+            setPlug(newMapFactory.getFactoryOutput());
+            getPlug().populateHTML(document);
+            return getNextId();
+        }
+
         if (!editorComplex.isDefinedTerm(sequence)) {
             return getId();
         }
@@ -75,10 +89,11 @@ public class TermSocket extends OrchidSocket {
             TermSocket mapTermSocket = termMap.getMapTermSocket();
             TermPlug termPlug = new TermPlug(editorComplex, currTerm);
             mapTermSocket.setPlug(termPlug);
+            termMap.commitNotification();
             setPlug(termMap.getFactoryOutput());
             plug.populateHTML(document);
             parentFactory.commitNotification();
-            return getNextId();
+            return termMap.getArgument().getId();
         }
         return getId();
     }

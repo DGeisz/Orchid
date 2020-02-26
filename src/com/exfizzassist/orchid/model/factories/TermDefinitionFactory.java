@@ -51,23 +51,37 @@ public class TermDefinitionFactory extends OrchidFactory {
     @Override
     public void commitNotification() {
         if (definitionSocket.plugged() && setSocket.plugged()) {
-            /*TODO: Check if the model in setSocket corresponds to a defined
-            *  rule, and if it does, make the term an element of that defined set.
-            *  Otherwise, make the new term a member of a generic set whose parent is
-            *  an element of the parent of the plug of setSocket*/
+            /*TODO: Fix this temporary implementation*/
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
-            OrchidSet parentSet = ((TermPlug)setSocket.getPlug()).getTerm().getParentSet();
-            if (parentSet.isSubsetOf(editorComplex.getSetOfAllSets())) {
-                OrchidSet newSet = ((HigherOrderSet) parentSet).newChildSet(editorComplex.newId(), editorComplex.getUniversalSet());
-                editorComplex.addSet(newSet);
-                SetTerm newSetTerm = new SetTerm(newSet, parentSet, editorComplex.newId(), false);
-                newSetTerm.setName(termName);
-                editorComplex.addTerm(termName, newSetTerm);
-            } else {
-                BasicTerm newTerm = new BasicTerm(parentSet, editorComplex.newId(), false);
-                newTerm.setName(termName);
-                editorComplex.addTerm(termName, newTerm);
-            }
+            OrchidSet parentSet = ((SetTerm) ((TermPlug) setSocket.getPlug()).getTerm()).getSet();
+            BasicTerm newTerm = new BasicTerm(parentSet, editorComplex.newId(), false);
+            newTerm.setName(termName);
+            editorComplex.addTerm(termName, newTerm);
+
+
+
+//            /*TODO: Check if the model in setSocket corresponds to a defined
+//            *  rule, and if it does, make the term an element of that defined set.
+//            *  Otherwise, make the new term a member of a generic set whose parent is
+//            *  an element of the parent of the plug of setSocket*/
+//            String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
+//            OrchidSet parentSet = ((TermPlug)setSocket.getPlug()).getTerm().getParentSet();
+//            if (parentSet.isSubsetOf(editorComplex.getSetOfAllSets())) {
+//                /*TODO:
+//                *  This is a little tricky.  Either this set corresponds to an existing rule,
+//                *  or it doesn't.  Change this if you want a special structure corresponding
+//                *  to a very specific rule.*/
+//                OrchidSet newSet = ((HigherOrderSet) parentSet).newChildSet(editorComplex.newId(), editorComplex.getUniversalSet());
+//                editorComplex.addSet(newSet);
+//                SetTerm newSetTerm = new SetTerm(newSet, parentSet, editorComplex.newId(), false);
+//                newSetTerm.setName(termName);
+//                editorComplex.addTerm(termName, newSetTerm);
+//            } else {
+//                parentSet = ((SetTerm) ((TermPlug) setSocket.getPlug()).getTerm()).getSet();
+//                BasicTerm newTerm = new BasicTerm(parentSet, editorComplex.newId(), false);
+//                newTerm.setName(termName);
+//                editorComplex.addTerm(termName, newTerm);
+//            }
         }
     }
 

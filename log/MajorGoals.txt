@@ -1,9 +1,10 @@
 1. (2-17-20): Come up with a model for storing rules.
 
-2. (2-17-20): Finish Epoch I Phase I:
+2. (2-17-20): Finish Epoch I Phase I: COMPLETED
     i. Can type into the editor (without deletion), and it
        generates proper structures according to the given
        sequences.
+       Goal completed 2/22
 
     ii. When the cursor gets to the end of the line, it generates
-        a new line.
+        a new line. Goal completed 2/22

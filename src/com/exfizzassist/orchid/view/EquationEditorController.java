@@ -184,6 +184,14 @@ public class EquationEditorController {
     }
 
     /**
+     * FOR DEBUGGING
+     */
+    public Document getEditorDocument() {
+
+        return editorEngine.getDocument();
+    }
+
+    /**
      * Returns the document of the Terms page*/
     public Document getTermsDocument() {
         return termsEngine.getDocument();

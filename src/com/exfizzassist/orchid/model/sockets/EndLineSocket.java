@@ -18,6 +18,8 @@ public class EndLineSocket extends OrchidSocket {
     @Override
     public void populateHTML(Document document) {
         super.populateHTML(document);
+        Element thisElement = document.getElementById(getId());
+        thisElement.setTextContent("");
     }
 
     @Override

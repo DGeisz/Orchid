@@ -37,6 +37,7 @@ public abstract class OrchidSet {
     @Override
     public boolean equals(Object object) {
         if (object instanceof OrchidSet) {
+            System.out.println("Debug 6: " + ((OrchidSet) object).getId().equals(getId()));
             return id.equals(((OrchidSet) object).getId());
         }
         return false;
@@ -47,7 +48,11 @@ public abstract class OrchidSet {
      * of otherSet
      */
     public boolean isSubsetOf(OrchidSet otherSet) {
-        if (superSets.contains(otherSet)) {
+        System.out.println("Debug 4: " + getId());
+        System.out.println("Debug 5: " + otherSet.getId());
+        if (otherSet.equals(this)) {
+            return true;
+        }else if (superSets.contains(otherSet)) {
             return true;
         }
         for (OrchidSet set : superSets) {

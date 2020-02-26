@@ -1,0 +1,22 @@
+Ok, I think it's safe to say that I finished PHASE 1.
+
+Now, there are several things that must be looked at next.
+I'm just going to stream of conscience these.
+
+1. A Better deletion scheme than what I currently have.
+    I.  Part of this is that it would be great to have some notion
+        of undo/redo
+
+2. Be able to click on an element and edit it.
+
+3. RULES.  How the frick to implement rules? For this, I think I'm
+going to have to implement another parallel model to the already
+double parallel model/controller structure.
+
+4. Persistence.  I'm tired of writing in the same sequences again and
+again.  I would love to have some persisted file structures.  JavaFx be
+with me.
+
+5. Cartesian fucking sets.  nuff said.
+
+6. (2-25-20 addition) A Testing framework

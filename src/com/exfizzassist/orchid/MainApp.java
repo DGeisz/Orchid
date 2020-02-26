@@ -11,12 +11,16 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 
 public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
     private EditorComplex editorComplex;
+
+    /**SET TO TRUE IF YOU ARE DEBUGGING*/
+    private final boolean debug = true;
 
     public static void main(String[] args) {
         launch(args);
@@ -91,6 +95,17 @@ public class MainApp extends Application {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * FOR TESTING AND DEBUGGING
+     * Get the editor complex*/
+    public EditorComplex getEditorComplex() throws Exception {
+        if (debug) {
+            return editorComplex;
+        } else {
+            throw new Exception("You haven't turned on debugging");
         }
     }
 }

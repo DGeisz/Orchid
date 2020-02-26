@@ -3,6 +3,7 @@ package com.exfizzassist.orchid.model.factories;
 import com.exfizzassist.orchid.model.editor_model.EditorComplex;
 import com.exfizzassist.orchid.model.plugs.ModelPlug;
 import com.exfizzassist.orchid.model.plugs.OrchidPlug;
+import com.exfizzassist.orchid.model.plugs.TermPlug;
 import com.exfizzassist.orchid.model.sets.OrchidSet;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
@@ -56,9 +57,9 @@ public class EqualityFactory extends OrchidFactory {
             return;
         }
         if (!leftSocketPlugged) {
-            leftHandSide.setElementOf(rightHandSide.getElementOf());
+            leftHandSide.setElementOf(((TermPlug) rightHandSide.getPlug()).getTerm().getParentSet());
         } else if (!rightSocketPlugged) {
-            rightHandSide.setElementOf(leftHandSide.getElementOf());
+            rightHandSide.setElementOf(((TermPlug) leftHandSide.getPlug()).getTerm().getParentSet());
         } else {
             /*TODO: IMPLEMENT this whenever you figure out how to store equalities/rules.*/
         }

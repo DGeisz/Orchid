@@ -36,6 +36,8 @@ public class MapFactory extends OrchidFactory {
         this.outputParentSet = outputParentSet;
         factoryType = "map-factory";
         mapTermSocket = new TermSocket(_editorComplex, this, editorComplex.getGenericMapSet(editorComplex.getUniversalSet(), outputParentSet));
+        System.out.println("Gorblin");
+        System.out.println(editorComplex.getGenericMapSet(editorComplex.getUniversalSet(), outputParentSet));
         argument = new TermSocket(_editorComplex, this, editorComplex.getUniversalSet());
         OrchidSocket prevSocket = _editorComplex.getSocket(prevSocketId);
         OrchidSocket nextSocket = _editorComplex.getSocket(nextSocketId);
@@ -76,6 +78,7 @@ public class MapFactory extends OrchidFactory {
                 .getMap()
                 .getSource());
         }
+
     }
 
     @Override
@@ -114,5 +117,12 @@ public class MapFactory extends OrchidFactory {
      */
     public TermSocket getMapTermSocket() {
         return mapTermSocket;
+    }
+
+    /**
+     * Getter for the argument socket
+     */
+    public TermSocket getArgument() {
+        return argument;
     }
 }

@@ -7,7 +7,7 @@ public class MapSet extends OrchidSet {
     /**
      * Elements of this set are this type of map
      */
-    OrchidMap map;
+    private OrchidMap map;
 
     /**
      * Indicates whether this set is a generic map set
@@ -21,6 +21,19 @@ public class MapSet extends OrchidSet {
         addSuperSet(universalSet);
         this.map = map;
         isGeneric = false;
+    }
+
+    @Override
+    public boolean isSubsetOf(OrchidSet otherSet) {
+        if (super.isSubsetOf(otherSet)) {
+            return true;
+        }
+        if (otherSet.isMapSet()) {
+            MapSet otherMapSet = (MapSet) otherSet;
+            return map.getSource().isSubsetOf(otherMapSet.getMap().getSource())
+                && map.getTarget().isSubsetOf(otherMapSet.getMap().getTarget());
+        }
+        return false;
     }
 
     @Override

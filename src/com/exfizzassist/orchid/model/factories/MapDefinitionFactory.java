@@ -10,6 +10,7 @@ import com.exfizzassist.orchid.model.sockets.DefinitionSocket;
 import com.exfizzassist.orchid.model.sockets.OrchidSocket;
 import com.exfizzassist.orchid.model.sockets.TermSocket;
 import com.exfizzassist.orchid.model.terms.BasicTerm;
+import com.exfizzassist.orchid.model.terms.SetTerm;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -67,7 +68,8 @@ public class MapDefinitionFactory extends OrchidFactory {
     public void commitNotification() {
         if (definitionSocket.plugged() && sourceSocket.plugged() && targetSocket.plugged()) {
             String termName = ((NewTermNamePlug) definitionSocket.getPlug()).getSequence();
-            MapSet parentSet = editorComplex.getGenericMapSet(((TermPlug) sourceSocket.getPlug()).getTerm().getParentSet(), ((TermPlug) targetSocket.getPlug()).getTerm().getParentSet());
+            MapSet parentSet = editorComplex.getGenericMapSet(((SetTerm)((TermPlug) sourceSocket.getPlug()).getTerm()).getSet(),
+                ((SetTerm)((TermPlug) targetSocket.getPlug()).getTerm()).getSet());
             BasicTerm newTerm = new BasicTerm(parentSet, editorComplex.newId(), false);
             newTerm.setName(termName);
             editorComplex.addTerm(termName, newTerm);

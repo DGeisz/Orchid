@@ -61,9 +61,9 @@ public class EditorComplex {
     /**
      * Built in sequence names to prevent redundancy
      */
-    private final String termDef = "termDef";
-    private final String mapDef = "mapDef";
-    private final String setDef = "setDef";
+    private final String termDef = "term";
+    private final String mapDef = "mapdef";
+    private final String setDef = "set";
     private final String mapSeq = "map";
     private final String equality = "=";
 
@@ -109,6 +109,9 @@ public class EditorComplex {
         *  give the set of all sets, but it will just be average
         *   HigherOrderSet for now*/
         setOfAllSets = new HigherOrderSet(newId(), getUniversalSet());
+
+        addSet(setOfAllSets);
+        addSet(universalSet);
 
         /*TODO: Test.  Getting it up and running*/
         builtInSeq = new ArrayList<>();
@@ -214,6 +217,14 @@ public class EditorComplex {
 //    }
 
     /**
+     * Returns true if SEQUENCE is the sequence
+     * that corresponds to building maps
+     */
+    public boolean isMapSequence(String sequence) {
+        return mapSeq.equals(sequence);
+    }
+
+    /**
      * RETURNS a new OrchidFactory corresponding to SEQ
      */
     public OrchidFactory factoryBuilder(String seq, String lastSocketId, String nextSocketId) {
@@ -283,6 +294,7 @@ public class EditorComplex {
             return (MapSet) setRegistry.get(genericMapSetRegistry.get(currKey));
         }
         MapSet newGeneric = new MapSet(currKey.getMap(), newId(), getUniversalSet());
+        addSet(newGeneric);
         genericMapSetRegistry.put(new GenericMapSetKey(source.getId(), target.getId()), newGeneric.getId());
         return newGeneric;
     }
@@ -303,6 +315,7 @@ public class EditorComplex {
 
         OrchidMap getMap() {
             if (map == null) {
+                System.out.println(setRegistry.get(sourceId));
                 map = new OrchidMap(setRegistry.get(sourceId), setRegistry.get(targetId));
             }
             return map;
