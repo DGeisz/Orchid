@@ -61,8 +61,9 @@ public class EditorComplex {
     /**
      * Built in sequence names to prevent redundancy
      */
+
     private final String termDef = "term";
-    private final String mapDef = "mapdef";
+    private final String mapDef = "mapDef";
     private final String setDef = "set";
     private final String mapSeq = "map";
     private final String equality = "=";

@@ -1,0 +1,6 @@
+set a
+set b
+mapDef f a b
+mapDef g b a
+term l a
+map f g f l

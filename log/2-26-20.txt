@@ -1,0 +1,13 @@
+I built a new testing framework, and it's the literal sauce.
+Takes in an input text file, and types it directly into orchid.
+It's pretty great.  This somewhat solves the problem of persistence,
+so I'm going to move onto something else on the 2-22-20 list.
+
+I think I'm first going to do deletion because Rules will require more unique
+architecture, and it would be nice to have deletion in place because it's going to
+be a very similar thing to commitSequence.  I think it's going do a call to its parent
+factory telling it that a deletion has taken place.  The parent factory will either
+redirect the cursor to one of its other sockets, or delete itself, and redirect all
+the way back to it's parent socket.  Yeah I'll do this first.  Rules next.
+
+And my gosh, at some point I gotta do cartesian fucking sets.  That has to be done.
